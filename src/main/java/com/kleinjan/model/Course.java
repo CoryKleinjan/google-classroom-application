@@ -23,4 +23,6 @@ public class Course {
     private String googleId;
     @Column(name = "name")
     private String name;
+    @Column(name = "user_id")
+    private String userId;
 }

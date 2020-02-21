@@ -12,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.classroom.model.*;
+import com.kleinjan.repository.CourseRepository;
+import com.kleinjan.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -32,6 +36,12 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 
 @RestController
 public class GoogleController {
+
+	@Autowired
+	CourseRepository courseRepository;
+
+	@Autowired
+	StudentRepository studentRepository;
 
 	private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -71,7 +81,7 @@ public class GoogleController {
 	}
 
 	@RequestMapping("/importTest")
-	public void importTest() throws Exception {
+	public void importTest(@AuthenticationPrincipal UserDetails currentUser) throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();
 
@@ -85,6 +95,13 @@ public class GoogleController {
 		List<Course> courses = courseResponse.getCourses();
 
 		for(Course course: courses){
+			com.kleinjan.model.Course courseObject = new com.kleinjan.model.Course();
+			courseObject.setGoogleId(course.getId());
+			courseObject.setName(course.getName());
+			courseObject.setUserId(currentUser.getUsername());
+
+			courseRepository.save(courseObject);
+
 			ListStudentsResponse studentResponse = classroom.courses().students().list(course.getId()).execute();
 
 			List<Student> students = studentResponse.getStudents();
