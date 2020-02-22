@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,4 +24,7 @@ public class Student {
     private String googleId;
     @Column(name = "name")
     private String name;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "course_students", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<Course> courses;
 }

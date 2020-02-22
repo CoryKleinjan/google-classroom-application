@@ -2,6 +2,7 @@ package com.kleinjan.controller;
 
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -98,23 +99,32 @@ public class GoogleController {
 			com.kleinjan.model.Course courseObject = new com.kleinjan.model.Course();
 			courseObject.setGoogleId(course.getId());
 			courseObject.setName(course.getName());
-			courseObject.setUserId(currentUser.getUsername());
-
-			courseRepository.save(courseObject);
+			courseObject.setUsername(currentUser.getUsername());
 
 			ListStudentsResponse studentResponse = classroom.courses().students().list(course.getId()).execute();
 
 			List<Student> students = studentResponse.getStudents();
 
+			Set<com.kleinjan.model.Student> courseStudents = new HashSet<>();
 			for(Student student: students){
-				try {
-					ListStudentSubmissionsResponse submissionsResponse = classroom.courses().courseWork().studentSubmissions().list(course.getId(), "-").execute();
+				ListStudentSubmissionsResponse submissionsResponse = classroom.courses().courseWork().studentSubmissions().list(course.getId(), "-").execute();
+				List<StudentSubmission> submissions = submissionsResponse.getStudentSubmissions();
 
-					List<StudentSubmission> submissions = submissionsResponse.getStudentSubmissions();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
+				com.kleinjan.model.Student studentObject = new com.kleinjan.model.Student();
+				studentObject.setGoogleId(student.getUserId());
+				studentObject.setName(student.getProfile().getName().getFullName());
+
+				Set<com.kleinjan.model.Course> studentCourses = new HashSet<>();
+				studentCourses.add(courseObject);
+				studentObject.setCourses(studentCourses);
+
+				studentRepository.save(studentObject);
+
+				courseStudents.add(studentObject);
 			}
+
+			courseObject.setStudents(courseStudents);
+			courseRepository.save(courseObject);
 		}
 	}
 }

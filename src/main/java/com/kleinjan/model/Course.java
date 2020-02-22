@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,6 +24,8 @@ public class Course {
     private String googleId;
     @Column(name = "name")
     private String name;
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "username")
+    private String username;
+    @ManyToMany(mappedBy = "courses")
+    private Set<Student> students;
 }
