@@ -1,10 +1,7 @@
 package com.kleinjan.controller;
 
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -105,7 +102,7 @@ public class GoogleController {
 
 			List<Student> students = studentResponse.getStudents();
 
-			Set<com.kleinjan.model.Student> courseStudents = new HashSet<>();
+			List<com.kleinjan.model.Student> courseStudents = new ArrayList<>();
 			for(Student student: students){
 				ListStudentSubmissionsResponse submissionsResponse = classroom.courses().courseWork().studentSubmissions().list(course.getId(), "-").execute();
 				List<StudentSubmission> submissions = submissionsResponse.getStudentSubmissions();
@@ -114,7 +111,7 @@ public class GoogleController {
 				studentObject.setGoogleId(student.getUserId());
 				studentObject.setName(student.getProfile().getName().getFullName());
 
-				Set<com.kleinjan.model.Course> studentCourses = new HashSet<>();
+				List<com.kleinjan.model.Course> studentCourses = new ArrayList<>();
 				studentCourses.add(courseObject);
 				studentObject.setCourses(studentCourses);
 

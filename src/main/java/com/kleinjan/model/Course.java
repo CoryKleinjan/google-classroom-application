@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,5 +28,5 @@ public class Course {
     @Column(name = "username")
     private String username;
     @ManyToMany(mappedBy = "courses")
-    private Set<Student> students;
+    private List<Student> students;
 }

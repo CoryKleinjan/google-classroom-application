@@ -22,7 +22,9 @@ public class Assignment {
     @Column(name = "course_id")
     private String courseId;
     @Column(name = "grade")
-    private String grade;
+    private Double grade;
+    @Column(name = "total_points")
+    private Double totalPoints;
     @Column(name = "student_id")
     private String studentId;
 }
