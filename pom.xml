@@ -122,28 +122,6 @@
                     </execution>
 
                     <execution>
-                        <id>install axios</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>install axios</arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>install react-router</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>install react-router-dom</arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>install our dependencies</id>
                         <goals>
                             <goal>npm</goal>

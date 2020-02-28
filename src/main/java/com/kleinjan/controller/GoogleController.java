@@ -3,22 +3,19 @@ package com.kleinjan.controller;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.classroom.model.*;
-import com.kleinjan.repository.CourseRepository;
-import com.kleinjan.repository.StudentRepository;
+import com.kleinjan.service.CourseService;
+import com.kleinjan.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -36,10 +33,10 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 public class GoogleController {
 
 	@Autowired
-	CourseRepository courseRepository;
+	CourseService courseService;
 
 	@Autowired
-	StudentRepository studentRepository;
+	StudentService studentService;
 
 	private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -76,6 +73,25 @@ public class GoogleController {
 
 		GoogleTokenResponse response = flow.newTokenRequest(token).setRedirectUri(CALLBACK_URI).execute();
 		flow.createAndStoreCredential(response, username);
+	}
+
+	@RequestMapping("/groupTest")
+	public void groupTest(@AuthenticationPrincipal UserDetails currentUser){
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = ((UserDetails)principal).getUsername();
+
+		com.kleinjan.model.Course course = courseService.findUserByUsername(username);
+
+
+	}
+
+	@RequestMapping("/loadTest")
+	public void loadTest(@AuthenticationPrincipal UserDetails currentUser){
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = ((UserDetails)principal).getUsername();
+
+		com.kleinjan.model.Course course = courseService.findUserByUsername(username);
+		System.out.println("test");
 	}
 
 	@RequestMapping("/importTest")
@@ -115,13 +131,13 @@ public class GoogleController {
 				studentCourses.add(courseObject);
 				studentObject.setCourses(studentCourses);
 
-				studentRepository.save(studentObject);
+				studentService.save(studentObject);
 
 				courseStudents.add(studentObject);
 			}
 
 			courseObject.setStudents(courseStudents);
-			courseRepository.save(courseObject);
+			courseService.save(courseObject);
 		}
 	}
 }

@@ -14,6 +14,12 @@ class Import extends Component {
         });
     };
 
+    loadTest = () => {
+        axios.post('/loadTest', ).then(function(response){
+            console.log(response);
+        });
+    };
+
     render() {
         return(
             <div>
@@ -22,6 +28,9 @@ class Import extends Component {
                 </button>
                 <button type="button" onClick={this.importTest}>
                     Import Test Class
+                </button>
+                <button type="button" onClick={this.loadTest}>
+                    Load Test Class
                 </button>
             </div>
         );
