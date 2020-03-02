@@ -16,7 +16,7 @@ public class GroupBuilder {
         Integer groupCounter = 0; //next group to add a student to
 
         for(int i = 0; i < numberOfGroups; i++){
-            groupingList.add(new List<Student>);
+            groupingList.add(new ArrayList<Student>());
         }
 
         for(Rule rule : ruleList) {
