@@ -12,8 +12,10 @@ import java.util.List;
 @RestController
 public class GroupController {
 
-    @RequestMapping("/create-group")
+    @RequestMapping("/groupTest")
     public List<List<Student>> createGroup(Course course, Integer numberOfGroups, List<Rule> ruleList){
+
+        //need to set the course, number of groups, and rule list, are they coming front the javascript?
 
         List<List<Student>> groupingList = new ArrayList<>();
         List<Student> studentList = course.getStudents();
