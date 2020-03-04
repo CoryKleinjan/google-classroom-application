@@ -75,16 +75,6 @@ public class GoogleController {
 		flow.createAndStoreCredential(response, username);
 	}
 
-	@RequestMapping("/groupTest")
-	public void groupTest(@AuthenticationPrincipal UserDetails currentUser){
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = ((UserDetails)principal).getUsername();
-
-		com.kleinjan.model.Course course = courseService.findUserByUsername(username);
-
-
-	}
-
 	@RequestMapping("/loadTest")
 	public void loadTest(@AuthenticationPrincipal UserDetails currentUser){
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
