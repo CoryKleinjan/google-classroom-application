@@ -29,4 +29,7 @@ public class Course {
     private String username;
     @ManyToMany(mappedBy = "courses")
     private List<Student> students;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
+    private List<Grouping> groupings;
 }
