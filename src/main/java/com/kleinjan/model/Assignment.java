@@ -20,11 +20,11 @@ public class Assignment {
     @Column(name = "assignment_id")
     private int assignmentId;
     @Column(name = "course_id")
-    private String courseId;
+    private int courseId;
     @Column(name = "grade")
     private Double grade;
     @Column(name = "total_points")
     private Double totalPoints;
     @Column(name = "student_id")
-    private String studentId;
+    private int studentId;
 }

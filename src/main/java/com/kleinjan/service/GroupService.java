@@ -1,5 +1,6 @@
 package com.kleinjan.service;
 
+import com.kleinjan.model.Group;
 import com.kleinjan.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,5 +13,9 @@ public class GroupService {
     @Autowired
     public GroupService(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
+    }
+
+    public Group save(Group group) {
+        return groupRepository.save(group);
     }
 }

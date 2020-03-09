@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.classroom.model.*;
+import com.kleinjan.service.AssignmentService;
 import com.kleinjan.service.CourseService;
 import com.kleinjan.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class GoogleController {
 
 	@Autowired
 	StudentService studentService;
+
+	@Autowired
+	AssignmentService assignmentService;
 
 	private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -110,9 +114,6 @@ public class GoogleController {
 
 			List<com.kleinjan.model.Student> courseStudents = new ArrayList<>();
 			for(Student student: students){
-				ListStudentSubmissionsResponse submissionsResponse = classroom.courses().courseWork().studentSubmissions().list(course.getId(), "-").execute();
-				List<StudentSubmission> submissions = submissionsResponse.getStudentSubmissions();
-
 				com.kleinjan.model.Student studentObject = new com.kleinjan.model.Student();
 				studentObject.setGoogleId(student.getUserId());
 				studentObject.setName(student.getProfile().getName().getFullName());
@@ -121,9 +122,23 @@ public class GoogleController {
 				studentCourses.add(courseObject);
 				studentObject.setCourses(studentCourses);
 
-				studentService.save(studentObject);
+				studentObject = studentService.save(studentObject);
 
 				courseStudents.add(studentObject);
+
+				ListStudentSubmissionsResponse submissionsResponse = classroom.courses().courseWork().studentSubmissions().list(course.getId(), "-").execute();
+				List<StudentSubmission> submissions = submissionsResponse.getStudentSubmissions();
+				for(StudentSubmission submission: submissions){
+					if(submission.getUserId().equals(student.getUserId())) {
+						com.kleinjan.model.Assignment assignmentObject = new com.kleinjan.model.Assignment();
+						assignmentObject.setStudentId(studentObject.getStudentId());
+						assignmentObject.setTotalPoints(submission.getSubmissionHistory().get(1).getGradeHistory().getMaxPoints());
+						assignmentObject.setCourseId(courseObject.getCourseId());
+						assignmentObject.setGrade(submission.getAssignedGrade());
+
+						assignmentObject = assignmentService.save(assignmentObject);
+					}
+				}
 			}
 
 			courseObject.setStudents(courseStudents);

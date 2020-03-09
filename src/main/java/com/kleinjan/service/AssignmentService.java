@@ -14,4 +14,8 @@ public class AssignmentService {
     public AssignmentService(AssignmentRepository assignmentRepository) {
         this.assignmentRepository = assignmentRepository;
     }
+
+    public Assignment save(Assignment assignment) {
+        return assignmentRepository.save(assignment);
+    }
 }
