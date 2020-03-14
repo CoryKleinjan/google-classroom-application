@@ -15,9 +15,11 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public Course findUserByUsername(String username) {
+    public Course findCourseByUsername(String username) {
         return courseRepository.findByUsername(username);
     }
+
+    public Course findCourseById(Integer courseId) { return courseRepository.findByCourseId(courseId); }
 
     public Course save(Course course) {
         return courseRepository.save(course);

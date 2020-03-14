@@ -84,7 +84,7 @@ public class GoogleController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();
 
-		com.kleinjan.model.Course course = courseService.findUserByUsername(username);
+		com.kleinjan.model.Course course = courseService.findCourseByUsername(username);
 		System.out.println("test");
 	}
 

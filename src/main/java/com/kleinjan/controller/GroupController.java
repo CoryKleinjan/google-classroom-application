@@ -3,7 +3,10 @@ package com.kleinjan.controller;
 import com.kleinjan.model.Course;
 import com.kleinjan.model.Rule;
 import com.kleinjan.model.Student;
+import com.kleinjan.service.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -12,13 +15,18 @@ import java.util.List;
 @RestController
 public class GroupController {
 
-    @RequestMapping("/groupTest")
-    public List<List<Student>> groupTest(Course course, Integer numberOfGroups, List<Rule> ruleList){
+    @Autowired
+    CourseService courseService;
 
+    @RequestMapping("/groupTest")
+    public List<List<Student>> groupTest(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
+
+        Course course = courseService.findCourseById(courseId);
+        List<Rule> ruleList = new ArrayList();
         List<List<Student>> groupingList = new ArrayList<>();
         List<Student> studentList = course.getStudents();
 
-        Integer groupCounter = 0; //next group to add a student to
+        Integer nextGroupCounter = 0;
 
         for(int i = 0; i < numberOfGroups; i++){
             groupingList.add(new ArrayList<Student>());
@@ -32,11 +40,29 @@ public class GroupController {
             }
         }
 
+        Integer averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
         for(Student student : studentList){
-            groupingList.get(groupCounter).add(student);
-            groupCounter++;
+            for(List<Student> group: groupingList){
+                if(group.size() <= averageGroupSize){
+                    group.add(student);
+                    break;
+                }
+            }
+
+            averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
         }
 
         return groupingList;
+    }
+
+    private  Integer getAverageGroupSize(List<List<Student>> groupingList, Integer numberOfGroups){
+
+        Integer totalGroupSize = 0;
+
+        for(List<Student> group: groupingList){
+            totalGroupSize += group.size();
+        }
+
+        return totalGroupSize/numberOfGroups;
     }
 }

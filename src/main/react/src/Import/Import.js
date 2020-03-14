@@ -8,6 +8,19 @@ class Import extends Component {
         this.props.history.push("/home");
     };
 
+    groupTest = () => {
+        axios({
+            method: 'get',
+            url: '/groupTest',
+            params: {
+                courseId: 198,
+                numberOfGroups: 2,
+            }
+        }).then(function(response){
+            console.log(response);
+        });
+    };
+
     importTest = () => {
         axios.post('/importTest', ).then(function(response){
             console.log(response);
@@ -31,6 +44,9 @@ class Import extends Component {
                 </button>
                 <button type="button" onClick={this.loadTest}>
                     Load Test Class
+                </button>
+                <button type="button" onClick={this.groupTest}>
+                    Group Test
                 </button>
             </div>
         );
