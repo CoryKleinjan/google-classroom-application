@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import axios from "axios";
 
-class Import extends Component {
-
-
-    routeHome = () => {
-        this.props.history.push("/home");
-    };
+class Classes extends Component {
 
     groupTest = () => {
         axios({
@@ -36,9 +31,6 @@ class Import extends Component {
     render() {
         return(
             <div>
-                <button type="button" onClick={this.routeHome}>
-                    Go to Home
-                </button>
                 <button type="button" onClick={this.importTest}>
                     Import Test Class
                 </button>
@@ -54,4 +46,4 @@ class Import extends Component {
 
 }
 
-export default Import;
+export default Classes;

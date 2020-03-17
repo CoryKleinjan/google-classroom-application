@@ -24,16 +24,12 @@ class Home extends Component {
     }
 
     routeImport = () => {
-
         this.props.history.push("/import");
     };
 
     render() {
         return(
             <div>
-                <button type="button" onClick={this.routeImport}>
-                    Go to Import
-                </button>
             </div>
         );
     }
