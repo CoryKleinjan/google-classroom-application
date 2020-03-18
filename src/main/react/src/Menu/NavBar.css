@@ -1,0 +1,12 @@
+.NavItem{
+    padding: 0 20px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.NavBar{
+    background-color: #0074D9;
+    height: 25px;
+    width: 100%;
+    position: fixed;
+}

@@ -3,19 +3,6 @@ import axios from "axios";
 
 class Classes extends Component {
 
-    groupTest = () => {
-        axios({
-            method: 'get',
-            url: '/groupTest',
-            params: {
-                courseId: 198,
-                numberOfGroups: 2,
-            }
-        }).then(function(response){
-            console.log(response);
-        });
-    };
-
     importTest = () => {
         axios.post('/importTest', ).then(function(response){
             console.log(response);
@@ -37,13 +24,9 @@ class Classes extends Component {
                 <button type="button" onClick={this.loadTest}>
                     Load Test Class
                 </button>
-                <button type="button" onClick={this.groupTest}>
-                    Group Test
-                </button>
             </div>
         );
     }
-
 }
 
 export default Classes;
