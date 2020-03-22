@@ -1,6 +1,7 @@
 package com.kleinjan.controller;
 
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.classroom.model.*;
+import com.kleinjan.ReturnWrappers.CourseReturn;
 import com.kleinjan.service.AssignmentService;
 import com.kleinjan.service.CourseService;
 import com.kleinjan.service.StudentService;
@@ -79,13 +81,19 @@ public class GoogleController {
 		flow.createAndStoreCredential(response, username);
 	}
 
-	@RequestMapping("/loadTest")
-	public void loadTest(@AuthenticationPrincipal UserDetails currentUser){
+	@RequestMapping("/load-all-courses")
+	public List<CourseReturn> loadTest(@AuthenticationPrincipal UserDetails currentUser){
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();
 
-		com.kleinjan.model.Course course = courseService.findCourseByUsername(username);
-		System.out.println("test");
+		List<com.kleinjan.model.Course> courseList = courseService.findCoursesByUsername(username);
+
+		List<CourseReturn> returnList = new ArrayList();
+		for( com.kleinjan.model.Course course : courseList){
+			returnList.add(new CourseReturn(course.getName(),course.getCourseId()));
+		}
+
+		return returnList;
 	}
 
 	@RequestMapping("/importTest")

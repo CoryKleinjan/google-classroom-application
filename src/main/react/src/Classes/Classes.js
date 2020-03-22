@@ -9,8 +9,8 @@ class Classes extends Component {
         });
     };
 
-    loadTest = () => {
-        axios.post('/loadTest', ).then(function(response){
+    loadCourses = () => {
+        axios.post('/load-all-courses', ).then(function(response){
             console.log(response);
         });
     };
@@ -21,7 +21,7 @@ class Classes extends Component {
                 <button type="button" onClick={this.importTest}>
                     Import Test Class
                 </button>
-                <button type="button" onClick={this.loadTest}>
+                <button type="button" onClick={this.loadCourses}>
                     Load Test Class
                 </button>
             </div>

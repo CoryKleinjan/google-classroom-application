@@ -1,6 +1,8 @@
 package com.kleinjan.controller;
 
+import com.kleinjan.ReturnWrappers.StudentReturn;
 import com.kleinjan.model.Course;
+import com.kleinjan.model.Group;
 import com.kleinjan.model.Rule;
 import com.kleinjan.model.Student;
 import com.kleinjan.service.CourseService;
@@ -19,7 +21,7 @@ public class GroupController {
     CourseService courseService;
 
     @RequestMapping("/groupTest")
-    public List<List<Student>> groupTest(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
+    public List<List<StudentReturn>> groupTest(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
 
         Course course = courseService.findCourseById(courseId);
         List<Rule> ruleList = new ArrayList();
@@ -52,7 +54,17 @@ public class GroupController {
             averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
         }
 
-        return groupingList;
+        List<List<StudentReturn>> returnList = new ArrayList();
+        for(List<Student> sList : groupingList){
+            List<StudentReturn> rList = new ArrayList();
+            for(Student student : sList){
+                rList.add(new StudentReturn(student.getName(), student.getStudentId()));
+            }
+
+            returnList.add(rList);
+        }
+
+        return returnList;
     }
 
     private  Integer getAverageGroupSize(List<List<Student>> groupingList, Integer numberOfGroups){

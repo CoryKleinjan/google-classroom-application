@@ -5,9 +5,11 @@ import com.kleinjan.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>{
-    Course findByUsername(String username);
+    List<Course> findCoursesByUsername(String username);
 
     Course findByCourseId(Integer courseId);
 }

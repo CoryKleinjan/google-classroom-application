@@ -5,6 +5,8 @@ import com.kleinjan.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CourseService {
 
@@ -15,8 +17,8 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public Course findCourseByUsername(String username) {
-        return courseRepository.findByUsername(username);
+    public List<Course> findCoursesByUsername(String username) {
+        return courseRepository.findCoursesByUsername(username);
     }
 
     public Course findCourseById(Integer courseId) { return courseRepository.findByCourseId(courseId); }

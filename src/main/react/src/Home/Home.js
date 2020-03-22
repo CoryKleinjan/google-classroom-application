@@ -23,10 +23,6 @@ class Home extends Component {
         }
     }
 
-    routeImport = () => {
-        this.props.history.push("/import");
-    };
-
     render() {
         return(
             <div>
