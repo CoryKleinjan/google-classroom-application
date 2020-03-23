@@ -13,12 +13,12 @@ class Courses extends Component {
     }
 
     componentDidMount() {
-    this.loadCourses();
+        this.loadCourses();
     }
 
-    importTest = () => {
-        axios.post('/importTest', ).then(function(response){
-            console.log(response);
+    importCourses = () => {
+        axios.post('/import-courses', ).then(function(response){
+            this.loadCourses();
         });
     };
 
@@ -32,10 +32,10 @@ class Courses extends Component {
         return(
             <div>
                 {this.state.courses.map(course => {
-                    return <Course courseName={course.courseName} />
+                    return <Course courseName={course.courseName} courseId={course.courseId} />
                 })}
-                <button type="button" onClick={this.importTest}>
-                    Import Test Class
+                <button type="button" onClick={this.importCourses}>
+                    Import Courses
                 </button>
             </div>
         );

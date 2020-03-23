@@ -96,7 +96,7 @@ public class GoogleController {
 		return returnList;
 	}
 
-	@RequestMapping("/importTest")
+	@RequestMapping("/import-courses")
 	public void importTest(@AuthenticationPrincipal UserDetails currentUser) throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();

@@ -20,7 +20,7 @@ public class GroupController {
     @Autowired
     CourseService courseService;
 
-    @RequestMapping("/groupTest")
+    @RequestMapping("/create-groups")
     public List<List<StudentReturn>> groupTest(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
 
         Course course = courseService.findCourseById(courseId);
