@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { Route, Switch } from 'react-router';
 import Home from './Home/Home';
-import Classes from './Classes/Classes';
+import Courses from './Classes/Courses';
 import Groups from './Groups/Groups';
 import NavBar from './Menu/NavBar';
 
@@ -15,7 +15,7 @@ class App extends React.Component{
                 <header className="App-header">
                     <Switch>
                         <Route path="/groups" component={Groups}></Route>
-                        <Route path="/classes" component={Classes}></Route>
+                        <Route path="/classes" component={Courses}></Route>
                         <Route path="/home" component={Home}></Route>
                         <Route path="/" component={Home}></Route>
                     </Switch>
