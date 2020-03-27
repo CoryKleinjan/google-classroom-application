@@ -20,7 +20,7 @@
                   th:object="${user}" method="post" class="form-horizontal"
                   role="form">
                 <h2>Registration Form</h2>
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                                class="validation-message"></label>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
                                class="validation-message"></label>
@@ -37,7 +37,7 @@
                                placeholder="Last Name" class="form-control"/>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <input type="text" th:field="*{email}" placeholder="Email"
                                class="form-control"/> <label
@@ -45,7 +45,7 @@
                             class="validation-message"></label>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <input type="text" th:field="*{userName}" placeholder="User Name"
                                class="form-control"/> <label
@@ -53,7 +53,7 @@
                             class="validation-message"></label>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <input type="password" th:field="*{password}"
                                placeholder="Password" class="form-control"/> <label
@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-classGroup">
                     <div class="col-sm-9">
                         <button type="submit" class="btn btn-primary btn-block">Register User</button>
                     </div>

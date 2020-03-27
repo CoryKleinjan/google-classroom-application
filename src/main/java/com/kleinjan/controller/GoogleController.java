@@ -1,7 +1,6 @@
 package com.kleinjan.controller;
 
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;

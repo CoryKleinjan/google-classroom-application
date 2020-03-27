@@ -13,14 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "groups")
-public class Group {
+@Table(name = "class_groups")
+public class ClassGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "group_id")
     private int groupId;
-    @Column(name = "grouping_id")
-    private String groupingId;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "group_students", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;

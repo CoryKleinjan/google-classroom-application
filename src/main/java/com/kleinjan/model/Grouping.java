@@ -20,10 +20,10 @@ public class Grouping {
     @Column(name = "grouping_id")
     private int groupingId;
     @Column(name = "course_id")
-    private String courseId;
+    private int courseId;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "grouping_id")
-    private List<Group> groups;
+    private List<ClassGroup> classGroups;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "grouping_id")
     private List<Rule> rules;

@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Data
 @Builder
@@ -29,7 +27,7 @@ public class Student {
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> courses;
     @ManyToMany(mappedBy = "students")
-    private List<Group> groups;
+    private List<ClassGroup> classGroups;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     private List<Assignment> assignments;

@@ -18,7 +18,7 @@ class App extends React.Component{
                 <div><NavBar></NavBar></div>
                 <header className="App-header">
                     <Switch>
-                        <Route path="/groups" component={Groups}></Route>
+                        <Route path="/classGroups" component={Groups}></Route>
                         <Route path="/editGroup" component={editGroup}></Route>
                         <Route path="/classes" component={Courses}></Route>
                         <Route path="/home" component={Home}></Route>
