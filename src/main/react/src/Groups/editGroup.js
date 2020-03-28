@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Groups extends Component {
+class editGroup extends Component {
 
     render() {
         return(
@@ -11,4 +11,4 @@ class Groups extends Component {
     }
 }
 
-export default Groups;
+export default editGroup;

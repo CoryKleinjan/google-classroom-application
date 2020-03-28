@@ -1,6 +1,6 @@
 package com.kleinjan.controller;
 
-import com.kleinjan.ReturnWrappers.StudentReturn;
+import com.kleinjan.returnWrappers.StudentReturn;
 import com.kleinjan.model.*;
 import com.kleinjan.service.CourseService;
 import com.kleinjan.service.GroupService;
@@ -25,10 +25,10 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping("/create-groups")
-    public List<List<StudentReturn>> groupTest(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
+    @RequestMapping("/create-grouping")
+    public List<List<StudentReturn>> createGrouping(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
 
-        Course course = courseService.findCourseById(courseId);
+        Course course = courseService.findByCourseId(courseId);
         List<Rule> ruleList = new ArrayList();
         List<List<Student>> groupingList = new ArrayList<>();
         List<Student> studentList = course.getStudents();
@@ -67,34 +67,30 @@ public class GroupController {
             returnList.add(rList);
         }
 
-        saveGroups(groupingList, ruleList, courseId);
+        saveGrouping(groupingList, ruleList, courseId);
 
         return returnList;
     }
 
-    private void saveGroups(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){
+    private void saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){
 
-        try {
-            Grouping groupingObject = new Grouping();
-            groupingObject.setCourseId(courseId);
-            groupingObject.setRules(ruleList);
+        Grouping groupingObject = new Grouping();
+        groupingObject.setCourseId(courseId);
+        groupingObject.setRules(ruleList);
 
-            List<ClassGroup> groupingClassGroups = new ArrayList<>();
+        List<ClassGroup> groupingClassGroups = new ArrayList<>();
 
-            for (List<Student> loopGroup : groupingList) {
-                ClassGroup classGroup = new ClassGroup();
-                classGroup.setStudents(loopGroup);
+        for (List<Student> loopGroup : groupingList) {
+            ClassGroup classGroup = new ClassGroup();
+            classGroup.setStudents(loopGroup);
 
-                groupService.save(classGroup);
+            groupService.save(classGroup);
 
-                groupingClassGroups.add(classGroup);
-            }
-
-            groupingObject.setClassGroups(groupingClassGroups);
-            groupingService.save(groupingObject);
-        }catch(Exception e){
-            e.printStackTrace();
+            groupingClassGroups.add(classGroup);
         }
+
+        groupingObject.setClassGroups(groupingClassGroups);
+        groupingService.save(groupingObject);
     }
 
     private  Integer getAverageGroupSize(List<List<Student>> groupingList, Integer numberOfGroups){

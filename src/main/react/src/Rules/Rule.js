@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Group = (props) => {
+const Rule = (props) => {
 
     return <div>
 
     </div>
 };
 
-export default Group;
+export default Rule;

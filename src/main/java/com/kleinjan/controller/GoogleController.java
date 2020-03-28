@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.classroom.model.*;
-import com.kleinjan.ReturnWrappers.CourseReturn;
+import com.kleinjan.returnWrappers.CourseReturn;
 import com.kleinjan.service.AssignmentService;
 import com.kleinjan.service.CourseService;
 import com.kleinjan.service.StudentService;
@@ -85,7 +85,7 @@ public class GoogleController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();
 
-		List<com.kleinjan.model.Course> courseList = courseService.findCoursesByUsername(username);
+		List<com.kleinjan.model.Course> courseList = courseService.findByUsername(username);
 
 		List<CourseReturn> returnList = new ArrayList();
 		for( com.kleinjan.model.Course course : courseList){

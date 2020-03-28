@@ -23,12 +23,11 @@ public class Student {
     private String googleId;
     @Column(name = "name")
     private String name;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @ManyToMany(mappedBy = "students")
     private List<Course> courses;
     @ManyToMany(mappedBy = "students")
     private List<ClassGroup> classGroups;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "student_id")
     private List<Assignment> assignments;
 }

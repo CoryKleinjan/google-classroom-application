@@ -27,9 +27,10 @@ public class Course {
     private String name;
     @Column(name = "username")
     private String username;
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "course_id")
     private List<Grouping> groupings;
 }

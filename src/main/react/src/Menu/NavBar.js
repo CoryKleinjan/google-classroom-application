@@ -10,11 +10,11 @@ class NavBar extends React.Component{
     }
 
     routeClasses() {
-        this.props.history.push("/classes");
+        this.props.history.push("/courses");
     }
 
     routeGroups() {
-        this.props.history.push("/groups");
+        this.props.history.push("/groupings");
     }
 
     render() {
@@ -22,8 +22,8 @@ class NavBar extends React.Component{
             <div className="NavBar">
                 <ul className="NavBar">
                     <a className="NavItem" onClick={() => this.routeHome() }>Home</a>
-                    <a className="NavItem" onClick={() => this.routeClasses() }>Classes</a>
-                    <a className="NavItem" onClick={() => this.routeGroups() }>Groups</a>
+                    <a className="NavItem" onClick={() => this.routeClasses() }>Courses</a>
+                    <a className="NavItem" onClick={() => this.routeGroups() }>Groupings</a>
                 </ul>
             </div>
         );

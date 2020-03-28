@@ -21,10 +21,10 @@ public class Grouping {
     private int groupingId;
     @Column(name = "course_id")
     private int courseId;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "grouping_id")
     private List<ClassGroup> classGroups;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "grouping_id")
     private List<Rule> rules;
 }

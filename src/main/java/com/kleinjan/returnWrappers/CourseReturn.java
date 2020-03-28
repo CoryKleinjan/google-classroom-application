@@ -1,4 +1,4 @@
-package com.kleinjan.ReturnWrappers;
+package com.kleinjan.returnWrappers;
 
 import java.io.Serializable;
 

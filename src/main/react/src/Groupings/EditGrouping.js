@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from "axios";
 
-class editGroup extends Component {
+class editGrouping extends Component {
 
-    createGroup = () => {
+    createGrouping = () => {
         axios({
             method: 'get',
             url: '/create-groups',
@@ -19,12 +19,12 @@ class editGroup extends Component {
     render() {
         return(
             <div>
-                <button type="button" onClick={this.createGroup}>
-                    Create Groups
+                <button type="button" onClick={this.createGrouping}>
+                    Create Grouping
                 </button>
             </div>
         );
     }
 }
 
-export default editGroup;
+export default editGrouping;

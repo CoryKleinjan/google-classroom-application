@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Group = (props) => {
+const Grouping = (props) => {
 
     return <div>
 
     </div>
 };
 
-export default Group;
+export default Grouping;

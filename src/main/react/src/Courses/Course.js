@@ -9,11 +9,11 @@ const Course = (props) => {
             <p>{props.courseName}</p>
 
             <button onClick={() => history.push({
-                pathname: '/editGroup',
+                pathname: '/editGrouping',
                 data: {courseId: props.courseId}
-            })}> Create Group </button>
+            })}> Create Grouping </button>
 
-            <button > Delete </button>
+            <button  onClick={props.deleteClick}> Delete </button>
 
            </div>
 };

@@ -17,13 +17,17 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Course> findCoursesByUsername(String username) {
+    public List<Course> findByUsername(String username) {
         return courseRepository.findCoursesByUsername(username);
     }
 
-    public Course findCourseById(Integer courseId) { return courseRepository.findByCourseId(courseId); }
+    public Course findByCourseId(Integer courseId) { return courseRepository.findByCourseId(courseId); }
 
     public Course save(Course course) {
         return courseRepository.save(course);
+    }
+
+    public void deleteById(Integer courseId) {
+        courseRepository.deleteById(courseId);
     }
 }

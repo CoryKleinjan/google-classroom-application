@@ -17,7 +17,7 @@ class Courses extends Component {
     }
 
     importCourses = () => {
-        axios.post('/import-courses', ).then(function(response){
+        axios.post('/import-courses', ).then((response) => {
             this.loadCourses();
         });
     };
@@ -28,11 +28,24 @@ class Courses extends Component {
         });
     };
 
+    deleteCourse = (index) => {
+        axios({
+            method: 'post',
+            url: '/delete-course',
+            params: {
+                courseId: this.state.courses[index].courseId,
+            }
+        }).then((response) => {
+            this.state.courses.splice(index, 1);
+            this.forceUpdate();
+        });
+    };
+
     render() {
         return(
             <div>
-                {this.state.courses.map(course => {
-                    return <Course courseName={course.courseName} courseId={course.courseId} />
+                {this.state.courses.map((course,index) => {
+                    return <Course deleteClick={() => this.deleteCourse(index)} courseName={course.courseName} courseId={course.courseId} />
                 })}
                 <button type="button" onClick={this.importCourses}>
                     Import Courses
