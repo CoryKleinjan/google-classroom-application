@@ -8,6 +8,9 @@ import Courses from './Courses/Courses';
 import Groupings from './Groupings/Groupings';
 import editGrouping from './Groupings/editGrouping';
 
+import Groups from './Groups/Groups';
+import editGroup from './Groups/editGroup';
+
 import NavBar from './Menu/NavBar';
 
 class App extends React.Component{

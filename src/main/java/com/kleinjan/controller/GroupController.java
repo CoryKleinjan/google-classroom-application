@@ -26,12 +26,12 @@ public class GroupController {
     GroupService groupService;
 
     @RequestMapping("/create-grouping")
-    public List<List<StudentReturn>> createGrouping(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups){
+    public List<List<StudentReturn>> createGrouping(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups, @RequestParam List<Rule> ruleList){
 
         Course course = courseService.findByCourseId(courseId);
-        List<Rule> ruleList = new ArrayList();
         List<List<Student>> groupingList = new ArrayList<>();
         List<Student> studentList = course.getStudents();
+
 
         for(int i = 0; i < numberOfGroups; i++){
             groupingList.add(new ArrayList<Student>());
@@ -39,7 +39,13 @@ public class GroupController {
 
         for(Rule rule : ruleList) {
             switch (rule.getType()) {
-                case "":
+                case "notTogether":
+                    groupingList.get(0).add(getStudentFromList(studentList, rule.getStudentOne()));
+                    studentList.remove(rule.getStudentOne());
+
+                    groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getStudentTwo()));
+                    studentList.remove(rule.getStudentTwo());
+
                     break;
                 default:
             }
@@ -102,5 +108,9 @@ public class GroupController {
         }
 
         return totalGroupSize/numberOfGroups;
+    }
+
+    public Student getStudentFromList(final List<Student> studentList, final Integer studentId){
+        return studentList.stream().filter(o -> o.getName().equals(studentId)).findFirst().get();
     }
 }
