@@ -21,7 +21,7 @@ public class Rule {
     @Column(name = "type")
     private String type;
     @Column(name = "student_one")
-    private Integer studentOne;
+    private Integer firstStudent;
     @Column(name = "student_two")
-    private Integer studentTwo;
+    private Integer secondStudent;
 }

@@ -21,6 +21,8 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
+    public Student findByStudentId(Integer studentId) {return studentRepository.findByStudentId(studentId);}
+
     public Student save(Student student) {
         return studentRepository.save(student);
     }

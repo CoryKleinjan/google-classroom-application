@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import Course from "../Courses/Course";
 
 class editGrouping extends Component {
 
@@ -32,17 +31,35 @@ class editGrouping extends Component {
     };
 
     createGrouping = () => {
+
+        let groupPackage = {ruleReturnList: this.state.ruleList, numberOfGroups: 2, courseId: this.props.location.data.courseId};
         axios({
-            method: 'get',
+            method: 'post',
             url: '/create-grouping',
-            params: {
-                courseId: this.props.location.data.courseId,
-                numberOfGroups: 2,
-                ruleList: this.state.ruleList
-            }
+            data: groupPackage
         }).then((response) => {
             console.log(response);
         });
+    };
+
+    submitRule = () => {
+        let rule = {};
+        let ruleList = this.state.ruleList;
+
+        rule.ruleType = this.state.ruleType;
+        rule.firstStudentId = this.state.firstStudent;
+        rule.secondStudentId = this.state.secondStudent;
+
+        ruleList.push(rule);
+
+        this.setState({
+            ruleList: ruleList,
+            ruleType: '',
+            firstStudent: '',
+            secondStudent: ''
+        });
+
+        this.forceUpdate();
     };
 
     firstStudentChangeHandler = event => {
@@ -66,23 +83,33 @@ class editGrouping extends Component {
     render() {
         if(this.state.ruleType === "notTogether"){
 
-            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentName} key={student.studentName}>{student.studentName}</option>)}</select>;
-            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentName} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+
+            this.ruleBuilder = <div>
+                {this.firstStudent}
+                {this.secondStudent}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+
+        } else if( this.state.ruleType === "together"){
+
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
 
             this.ruleBuilder = <div>
                 test
                 {this.firstStudent}
                 {this.secondStudent}
+                <button onClick={this.submitRule}>Submit Rule</button>
             </div>
 
-        } else if( this.state.ruleType === "together"){
-            this.getStudentList();
         }
 
         return(
             <div>
                 <form>
-                    <label> Pick Rule Type</label>
+                    <label> Pick Rule Type:  </label>
                     <select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
                         <option value=""> Please choose a rule type.</option>
                         <option value="notTogether"> Students cannot share group</option>

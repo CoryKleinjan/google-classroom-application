@@ -1,13 +1,13 @@
 package com.kleinjan.controller;
 
+import com.kleinjan.returnWrappers.RuleReturn;
+import com.kleinjan.returnWrappers.GroupPackage;
 import com.kleinjan.returnWrappers.StudentReturn;
 import com.kleinjan.model.*;
-import com.kleinjan.service.CourseService;
-import com.kleinjan.service.GroupService;
-import com.kleinjan.service.GroupingService;
+import com.kleinjan.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -20,18 +20,28 @@ public class GroupController {
     CourseService courseService;
 
     @Autowired
+    StudentService studentService;
+
+    @Autowired
     GroupingService groupingService;
 
     @Autowired
     GroupService groupService;
 
+    @Autowired
+    RuleService ruleService;
+
     @RequestMapping("/create-grouping")
-    public List<List<StudentReturn>> createGrouping(@RequestParam Integer courseId, @RequestParam Integer numberOfGroups, @RequestParam List<Rule> ruleList){
+    public List<List<StudentReturn>> createGrouping(@RequestBody GroupPackage groupPackage){
+
+        Integer courseId = groupPackage.getCourseId();
+        Integer numberOfGroups = groupPackage.getNumberOfGroups();
 
         Course course = courseService.findByCourseId(courseId);
         List<List<Student>> groupingList = new ArrayList<>();
         List<Student> studentList = course.getStudents();
-
+        List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
+        Integer currentGroup = 0;
 
         for(int i = 0; i < numberOfGroups; i++){
             groupingList.add(new ArrayList<Student>());
@@ -40,11 +50,13 @@ public class GroupController {
         for(Rule rule : ruleList) {
             switch (rule.getType()) {
                 case "notTogether":
-                    groupingList.get(0).add(getStudentFromList(studentList, rule.getStudentOne()));
-                    studentList.remove(rule.getStudentOne());
+                    groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
+                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                    studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
 
-                    groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getStudentTwo()));
-                    studentList.remove(rule.getStudentTwo());
+                    groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
+                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                    studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
 
                     break;
                 default:
@@ -111,6 +123,33 @@ public class GroupController {
     }
 
     public Student getStudentFromList(final List<Student> studentList, final Integer studentId){
-        return studentList.stream().filter(o -> o.getName().equals(studentId)).findFirst().get();
+        return studentList.stream().filter(o -> o.getStudentId() == studentId).findFirst().get();
+    }
+
+    public List<Rule> createRuleList(List<RuleReturn> ruleReturnList){
+
+        List<Rule> ruleList = new ArrayList();
+
+        for(RuleReturn ruleReturn : ruleReturnList){
+            Rule rule = new Rule();
+            rule.setType(ruleReturn.getRuleType());
+            rule.setFirstStudent(studentService.findByStudentId(ruleReturn.getFirstStudentId()).getStudentId());
+            rule.setSecondStudent(studentService.findByStudentId(ruleReturn.getSecondStudentId()).getStudentId());
+
+            rule = ruleService.save(rule);
+            ruleList.add(rule);
+        }
+
+        return ruleList;
+    }
+
+    public Integer iterateCurrentGroup(Integer currentGroup, Integer numberOfGroups){
+        if(currentGroup < numberOfGroups -1){
+            currentGroup++;
+        } else {
+            currentGroup = 0;
+        }
+
+        return currentGroup;
     }
 }
