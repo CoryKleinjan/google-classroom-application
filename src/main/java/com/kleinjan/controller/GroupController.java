@@ -39,7 +39,7 @@ public class GroupController {
 
         Course course = courseService.findByCourseId(courseId);
         List<List<Student>> groupingList = new ArrayList<>();
-        List<Student> studentList = course.getStudents();
+        List<Student> studentList = new ArrayList(course.getStudents());
         List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
         Integer currentGroup = 0;
 

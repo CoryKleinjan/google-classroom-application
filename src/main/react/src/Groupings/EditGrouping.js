@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import Rule from '../Rules/Rule';
 
 class editGrouping extends Component {
 
@@ -80,11 +81,16 @@ class editGrouping extends Component {
         });
     };
 
+    deleteRule = (index) => {
+        this.state.ruleList.splice(index, 1);
+        this.forceUpdate();
+    };
+
     render() {
         if(this.state.ruleType === "notTogether"){
 
-            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
-            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
 
             this.ruleBuilder = <div>
                 {this.firstStudent}
@@ -94,8 +100,8 @@ class editGrouping extends Component {
 
         } else if( this.state.ruleType === "together"){
 
-            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
-            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
 
             this.ruleBuilder = <div>
                 test
@@ -104,10 +110,16 @@ class editGrouping extends Component {
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
 
+        } else{
+            this.ruleBuilder = <div></div>
         }
 
         return(
             <div>
+                <p> Rules </p>
+                {this.state.ruleList.map((rule, index) => {
+                    return <Rule deleteClick={() => this.deleteRule(index)} rule={rule} />
+                })}
                 <form>
                     <label> Pick Rule Type:  </label>
                     <select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
