@@ -40,6 +40,10 @@ class editGrouping extends Component {
             data: groupPackage
         }).then((response) => {
             console.log(response);
+            this.props.history.push({
+                pathname: '/courseGrouping',
+                data: {courseId: this.props.location.data.courseId, grouping:response.data, groupPackage: groupPackage}
+            });
         });
     };
 
