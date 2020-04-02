@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 import Rule from '../Rules/Rule';
 
-class editGrouping extends Component {
+class createGrouping extends Component {
 
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ class editGrouping extends Component {
             console.log(response);
             this.props.history.push({
                 pathname: '/courseGrouping',
-                data: {courseId: this.props.location.data.courseId, grouping:response.data, groupPackage: groupPackage}
+                data: {courseId: this.props.location.data.courseId, groupList:response.data.groupList, ruleList: response.data.ruleList}
             });
         });
     };
@@ -141,4 +141,4 @@ class editGrouping extends Component {
     }
 }
 
-export default editGrouping;
+export default createGrouping;

@@ -5,6 +5,8 @@ import com.kleinjan.repository.GroupingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GroupingService {
 
@@ -18,4 +20,8 @@ public class GroupingService {
     public Grouping save(Grouping grouping) {
         return groupingRepository.save(grouping);
     }
+
+    public void deleteById(Integer groupingId) { groupingRepository.deleteById(groupingId); }
+
+    public List<Grouping> findByCourseId(Integer courseId) { return groupingRepository.findByCourseId(courseId); }
 }

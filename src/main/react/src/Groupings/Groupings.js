@@ -1,24 +1,33 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import GroupingSelector from "./GroupingSelector";
 
 class Groupings extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            groupings: props.location.data.grouping,
+            groupings: [],
             courseId: props.location.data.courseId,
         };
     }
 
     componentDidMount() {
         this.loadGroupings();
-        console.log(this.state);
     }
 
     loadGroupings = () => {
-        axios.post('/load-groupings-by-course-id', ).then((response) => {
-            this.setState({groupings: response.data});
+        axios({
+            method: 'post',
+            url: '/load-groupings-by-course-id',
+            params: {
+                courseId: this.state.courseId,
+            }
+        }).then((response) => {
+            this.setState({
+                groupings: response.data
+            });
+            console.log(this.state);
         });
     };
 
@@ -36,8 +45,13 @@ class Groupings extends Component {
     };
 
     render() {
+
+        console.log(this.state);
         return(
             <div>
+                {this.state.groupings.map((grouping,index) => {
+                    return <GroupingSelector deleteClick={() => this.deleteGrouping(index)} courseId={this.state.courseId} groupId={grouping.groupId} groupList={grouping.groupList} ruleList={grouping.ruleList}/>
+                })}
             </div>
         );
     }

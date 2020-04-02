@@ -5,8 +5,9 @@ import Home from './Home/Home';
 
 import Courses from './Courses/Courses';
 
+import Groupings from './Groupings/Groupings';
 import Grouping from './Groupings/Grouping';
-import editGrouping from './Groupings/editGrouping';
+import createGrouping from './Groupings/createGrouping';
 
 import editGroup from './Groups/editGroup';
 
@@ -22,7 +23,8 @@ class App extends React.Component{
                     <Switch>
                         <Route path="/editGroup" component={editGroup}></Route>
                         <Route path="/courseGrouping" component={Grouping}></Route>
-                        <Route path="/editGrouping" component={editGrouping}></Route>
+                        <Route path="/createGrouping" component={createGrouping}></Route>
+                        <Route path="/groupings" component={Groupings}></Route>
                         <Route path="/courses" component={Courses}></Route>
                         <Route path="/home" component={Home}></Route>
                         <Route path="/" component={Home}></Route>

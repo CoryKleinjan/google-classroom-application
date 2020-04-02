@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from "axios";
 import Group from "../Groups/Group";
 
 class Grouping extends Component {
@@ -7,30 +6,20 @@ class Grouping extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupings: props.location.data.grouping,
+            groupList: props.location.data.groupList,
             courseId: props.location.data.courseId,
-            groupData: props.location.data.groupPackage
+            ruleList: props.location.data.ruleList
         };
     }
 
-    deleteGrouping = (index) => {
-        axios({
-            method: 'post',
-            url: '/delete-grouping',
-            params: {
-                groupingId: this.state.groupings[index].groupingId,
-            }
-        }).then((response) => {
-            this.state.groupings.splice(index, 1);
-            this.forceUpdate();
-        });
-    };
-
     render() {
+
+        console.log(this.state);
+
         return(
             <div>
-                {this.state.groupings.map((group, index) => {
-                    return <Group groupNumber={index} group={group} />
+                {this.state.groupList.map((group, index) => {
+                    return <Group groupNumber={index} groupId={group.groupId} group={group.studentList} />
                 })}
             </div>
         );

@@ -1,15 +1,15 @@
 package com.kleinjan.controller;
 
-import com.kleinjan.returnWrappers.RuleReturn;
-import com.kleinjan.returnWrappers.GroupPackage;
-import com.kleinjan.returnWrappers.StudentReturn;
+import com.kleinjan.returnWrappers.*;
 import com.kleinjan.model.*;
 import com.kleinjan.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class GroupController {
     RuleService ruleService;
 
     @RequestMapping("/create-grouping")
-    public List<List<StudentReturn>> createGrouping(@RequestBody GroupPackage groupPackage){
+    public GroupingReturn createGrouping(@RequestBody GroupPackage groupPackage){
 
         Integer courseId = groupPackage.getCourseId();
         Integer numberOfGroups = groupPackage.getNumberOfGroups();
@@ -75,22 +75,97 @@ public class GroupController {
             averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
         }
 
-        List<List<StudentReturn>> returnList = new ArrayList();
-        for(List<Student> sList : groupingList){
-            List<StudentReturn> rList = new ArrayList();
-            for(Student student : sList){
-                rList.add(new StudentReturn(student.getName(), student.getStudentId()));
-            }
+        Grouping savedGrouping = saveGrouping(groupingList, ruleList, courseId);
 
-            returnList.add(rList);
+        List<GroupReturn> gList = new ArrayList();
+        for(ClassGroup group : savedGrouping.getClassGroups()){
+            GroupReturn groupReturn = new GroupReturn(group.getGroupId());
+
+            List<StudentReturn> sList = new ArrayList();
+            for(Student student : group.getStudents()) {
+                StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
+
+                sList.add(studentReturn);
+            }
+            groupReturn.setStudentList(sList);
+
+            gList.add(groupReturn);
         }
 
-        saveGrouping(groupingList, ruleList, courseId);
+        List<RuleReturn> rList = new ArrayList();
+        for(Rule rule : savedGrouping.getRules()){
+            RuleReturn ruleReturn = new RuleReturn();
+
+            ruleReturn.setRuleType(rule.getType());
+            try{
+                ruleReturn.setFirstStudentId(rule.getFirstStudent());
+                ruleReturn.setSecondStudentId(rule.getSecondStudent());
+            }catch(NullPointerException e){}
+
+            rList.add(ruleReturn);
+        }
+
+        GroupingReturn groupingReturn = new GroupingReturn(savedGrouping.getCourseId(), savedGrouping.getGroupingId());
+        groupingReturn.setGroupList(gList);
+        groupingReturn.setRuleList(rList);
+
+        return groupingReturn;
+    }
+
+    @RequestMapping("load-groupings-by-course-id")
+    public List<GroupingReturn> loadGroupingsByCourseId(@RequestParam Integer courseId){
+        List<Grouping> groupingList = groupingService.findByCourseId(courseId);
+
+        List<GroupingReturn> returnList = new ArrayList();
+
+        for(Grouping grouping : groupingList){
+            GroupingReturn groupingReturn = new GroupingReturn(grouping.getCourseId(), grouping.getGroupingId());
+
+            List<GroupReturn> groupList = new ArrayList();
+            for(ClassGroup group : grouping.getClassGroups()){
+                GroupReturn groupReturn = new GroupReturn(group.getGroupId());
+
+
+                List<StudentReturn> studentList = new ArrayList();
+                for(Student student : group.getStudents()){
+                    StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
+
+                    studentList.add(studentReturn);
+                }
+                groupReturn.setStudentList(studentList);
+
+                groupList.add(groupReturn);
+            }
+
+            groupingReturn.setGroupList(groupList);
+
+            List<RuleReturn> ruleList = new ArrayList();
+            for(Rule rule : grouping.getRules()){
+                RuleReturn ruleReturn = new RuleReturn();
+
+                ruleReturn.setRuleType(rule.getType());
+                try{
+                    ruleReturn.setFirstStudentId(rule.getFirstStudent());
+                    ruleReturn.setSecondStudentId(rule.getSecondStudent());
+                }catch(NullPointerException e){}
+
+                ruleList.add(ruleReturn);
+            }
+
+            groupingReturn.setRuleList(ruleList);
+
+            returnList.add(groupingReturn);
+        }
 
         return returnList;
     }
 
-    private void saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){
+    @RequestMapping("/delete-grouping")
+    public void deleteGrouping(@RequestParam Integer groupingId){
+        groupingService.deleteById(groupingId);
+    }
+
+    private Grouping saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){
 
         Grouping groupingObject = new Grouping();
         groupingObject.setCourseId(courseId);
@@ -108,7 +183,7 @@ public class GroupController {
         }
 
         groupingObject.setClassGroups(groupingClassGroups);
-        groupingService.save(groupingObject);
+        return groupingService.save(groupingObject);
     }
 
     private  Integer getAverageGroupSize(List<List<Student>> groupingList, Integer numberOfGroups){
