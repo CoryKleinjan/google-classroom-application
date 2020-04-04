@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class RuleReturn implements Serializable {
     String ruleType;
+    Integer ruleId;
     Integer firstStudentId;
     Integer secondStudentId;
 
@@ -29,5 +30,13 @@ public class RuleReturn implements Serializable {
 
     public void setSecondStudentId(Integer secondStudentId) {
         this.secondStudentId = secondStudentId;
+    }
+
+    public Integer getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(Integer ruleId) {
+        this.ruleId = ruleId;
     }
 }

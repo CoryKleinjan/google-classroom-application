@@ -19,4 +19,8 @@ public class RuleService {
     public Rule save(Rule rule) {
         return ruleRepository.save(rule);
     }
+
+    public void deleteById(Integer ruleId) {
+        ruleRepository.deleteById(ruleId);
+    }
 }

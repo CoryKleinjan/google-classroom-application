@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +96,7 @@ public class GroupController {
             RuleReturn ruleReturn = new RuleReturn();
 
             ruleReturn.setRuleType(rule.getType());
+            ruleReturn.setRuleId(rule.getId());
             try{
                 ruleReturn.setFirstStudentId(rule.getFirstStudent());
                 ruleReturn.setSecondStudentId(rule.getSecondStudent());
@@ -144,6 +144,7 @@ public class GroupController {
                 RuleReturn ruleReturn = new RuleReturn();
 
                 ruleReturn.setRuleType(rule.getType());
+                ruleReturn.setRuleId(rule.getId());
                 try{
                     ruleReturn.setFirstStudentId(rule.getFirstStudent());
                     ruleReturn.setSecondStudentId(rule.getSecondStudent());
@@ -208,6 +209,7 @@ public class GroupController {
         for(RuleReturn ruleReturn : ruleReturnList){
             Rule rule = new Rule();
             rule.setType(ruleReturn.getRuleType());
+            rule.setId(ruleReturn.getRuleId());
             rule.setFirstStudent(studentService.findByStudentId(ruleReturn.getFirstStudentId()).getStudentId());
             rule.setSecondStudent(studentService.findByStudentId(ruleReturn.getSecondStudentId()).getStudentId());
 

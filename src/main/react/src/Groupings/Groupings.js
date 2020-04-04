@@ -27,7 +27,6 @@ class Groupings extends Component {
             this.setState({
                 groupings: response.data
             });
-            console.log(this.state);
         });
     };
 
