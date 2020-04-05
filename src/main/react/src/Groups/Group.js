@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
+import {useHistory} from "react-router-dom";
 
-class Group extends Component {
+const Group  = (props) => {
 
-    render() {
-        return(
-            <div>
-                <p>Group {this.props.groupNumber + 1}</p>
+    let history = useHistory();
 
-                {this.props.group.map(student => {
-                    return <p>{student.studentName}</p>
-                })}
+    return(
+        <div>
+            <p>Group {props.index + 1}</p>
+            {props.group.map(student => {
+                return <p>{student.studentName}</p>
+            })}
+            <button onClick={() => history.push({
+                pathname: '/editGroup',
+                data: {returnState: props.returnState, group: props.group, courseId: props.courseId, groupId: props.groupId, index: props.index}
+            })}> Edit </button>
 
-            </div>
-        );
-    }
-}
+            <button  onClick={props.deleteClick}> Delete </button>
+        </div>
+    );
+};
 
 export default Group;

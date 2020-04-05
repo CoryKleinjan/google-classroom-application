@@ -17,7 +17,7 @@ public class Rule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "rule_id")
-    private int id;
+    private Integer id;
     @Column(name = "type")
     private String type;
     @Column(name = "student_one")

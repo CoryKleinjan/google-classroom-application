@@ -18,4 +18,10 @@ public class GroupService {
     public ClassGroup save(ClassGroup classGroup) {
         return groupRepository.save(classGroup);
     }
+
+    public void deleteById(Integer groupId) { groupRepository.deleteById(groupId);}
+
+    public ClassGroup getById(Integer groupId) {
+        return groupRepository.getOne(groupId);
+    }
 }

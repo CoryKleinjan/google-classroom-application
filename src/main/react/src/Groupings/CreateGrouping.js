@@ -39,7 +39,6 @@ class createGrouping extends Component {
             url: '/create-grouping',
             data: groupPackage
         }).then((response) => {
-            console.log(response);
             this.props.history.push({
                 pathname: '/courseGrouping',
                 data: {courseId: this.props.location.data.courseId, groupList:response.data.groupList, ruleList: response.data.ruleList}
@@ -108,7 +107,6 @@ class createGrouping extends Component {
             this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
 
             this.ruleBuilder = <div>
-                test
                 {this.firstStudent}
                 {this.secondStudent}
                 <button onClick={this.submitRule}>Submit Rule</button>

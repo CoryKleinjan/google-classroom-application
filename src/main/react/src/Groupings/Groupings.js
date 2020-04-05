@@ -30,12 +30,12 @@ class Groupings extends Component {
         });
     };
 
-    deleteGrouping = (index) => {
+    deleteGrouping = (index, groupingId) => {
         axios({
             method: 'post',
             url: '/delete-grouping',
             params: {
-                groupingId: this.state.groupings[index].groupingId,
+                groupingId: groupingId,
             }
         }).then((response) => {
             this.state.groupings.splice(index, 1);
@@ -44,12 +44,10 @@ class Groupings extends Component {
     };
 
     render() {
-
-        console.log(this.state);
         return(
             <div>
                 {this.state.groupings.map((grouping,index) => {
-                    return <GroupingSelector deleteClick={() => this.deleteGrouping(index)} courseId={this.state.courseId} groupId={grouping.groupId} groupList={grouping.groupList} ruleList={grouping.ruleList}/>
+                    return <GroupingSelector deleteClick={() => this.deleteGrouping(index, grouping.groupId)} courseId={this.state.courseId} groupId={grouping.groupId} groupList={grouping.groupList} ruleList={grouping.ruleList}/>
                 })}
             </div>
         );

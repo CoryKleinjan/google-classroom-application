@@ -1,6 +1,8 @@
 package com.kleinjan.controller;
 
+import com.kleinjan.model.ClassGroup;
 import com.kleinjan.model.Course;
+import com.kleinjan.model.Grouping;
 import com.kleinjan.model.Student;
 import com.kleinjan.returnWrappers.StudentReturn;
 import com.kleinjan.service.CourseService;

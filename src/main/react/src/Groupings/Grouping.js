@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Group from "../Groups/Group";
 import axios from "axios";
-import GroupingSelector from "./GroupingSelector";
 import Rule from "../Rules/Rule";
 
 class Grouping extends Component {
@@ -24,6 +23,17 @@ class Grouping extends Component {
         return -1;
     };
 
+    groupDeleteClick = (index) => {
+        axios({
+            method: 'post',
+            url: '/delete-group',
+            params: { groupId: this.state.groupList[index].groupId }
+        }).then((response) => {
+            this.state.groupList.splice(index, 1);
+            this.forceUpdate();
+        });
+    };
+
     ruleDeleteClick = (index) => {
         axios({
             method: 'post',
@@ -41,14 +51,17 @@ class Grouping extends Component {
 
         return(
             <div>
+                <b>Groups</b>
                 <div>
                     {this.state.groupList.map((group, index) => {
-                        return <Group groupNumber={index} groupId={group.groupId} group={group.studentList} rules={this.state.ruleList[index]}/>
+                        return <Group returnState={this.state} index={index} groupId={group.groupId} courseId={this.state.courseId}  group={group.studentList} deleteClick={() => this.groupDeleteClick(index)} />
                     })}
                 </div>
+                <br/>
+                <b>Rules</b>
                 <div >
                     {this.state.ruleList.map((rule, index) => {
-                        return <Rule rule={rule} deleteClick={() => this.ruleDeleteClick(index)} />
+                        return <Rule returnState={this.state} rule={rule} index={index} courseId={this.state.courseId} deleteClick={() => this.ruleDeleteClick(index)} />
                     })}
                 </div>
             </div>

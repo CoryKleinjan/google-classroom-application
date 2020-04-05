@@ -11,6 +11,8 @@ import createGrouping from './Groupings/createGrouping';
 
 import editGroup from './Groups/editGroup';
 
+import editRule from './Rules/editRule';
+
 import NavBar from './Menu/NavBar';
 
 class App extends React.Component{
@@ -21,6 +23,7 @@ class App extends React.Component{
                 <div><NavBar></NavBar></div>
                 <header className="App-header">
                     <Switch>
+                        <Route path="/editRule" component={editRule}></Route>
                         <Route path="/editGroup" component={editGroup}></Route>
                         <Route path="/courseGrouping" component={Grouping}></Route>
                         <Route path="/createGrouping" component={createGrouping}></Route>
