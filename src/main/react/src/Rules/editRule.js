@@ -61,7 +61,7 @@ class editRule extends Component {
 
             this.props.history.push({
                 pathname: '/courseGrouping',
-                data: {courseId: this.state.courseId, groupList:this.state.returnState.groupList, ruleList: this.state.returnState.ruleList}
+                data: {courseId: this.state.courseId, groupList:this.state.returnState.groupList, ruleList: this.state.returnState.ruleList, groupId: this.state.returnState.groupId},
             });
         });
     };

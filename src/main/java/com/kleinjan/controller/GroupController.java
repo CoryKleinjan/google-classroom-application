@@ -77,7 +77,12 @@ public class GroupController {
                 averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
             }
 
-            Grouping savedGrouping = saveGrouping(groupingList, ruleList, courseId);
+            Grouping savedGrouping;
+            if(groupPackage.getRecreation()){
+                savedGrouping = saveGrouping(groupingList, ruleList, courseId, true, groupPackage.getGroupId());
+            } else{
+                savedGrouping = saveGrouping(groupingList, ruleList, courseId, false, null);
+            }
 
             List<GroupReturn> gList = new ArrayList();
             for (ClassGroup group : savedGrouping.getClassGroups()) {
@@ -244,7 +249,7 @@ public class GroupController {
         return returnList;
     }
 
-    private Grouping saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){
+    private Grouping saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId, Boolean recreation, Integer groupingId){
 
         Grouping groupingObject = new Grouping();
         groupingObject.setCourseId(courseId);
@@ -261,6 +266,9 @@ public class GroupController {
             groupingClassGroups.add(classGroup);
         }
 
+        if(recreation){
+            groupingObject.setGroupingId(groupingId);
+        }
         groupingObject.setClassGroups(groupingClassGroups);
         return groupingService.save(groupingObject);
     }

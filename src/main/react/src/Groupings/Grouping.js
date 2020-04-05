@@ -10,7 +10,11 @@ class Grouping extends Component {
         this.state = {
             groupList: props.location.data.groupList,
             courseId: props.location.data.courseId,
-            ruleList: props.location.data.ruleList
+            ruleList: props.location.data.ruleList,
+            groupId: props.location.data.groupId,
+            firstStudent: '',
+            secondStudent: '',
+            ruleType: ''
         };
     }
 
@@ -45,7 +49,60 @@ class Grouping extends Component {
         });
     };
 
+    reCreateGrouping = () => {
+        let groupPackage = {ruleReturnList: this.state.ruleList, numberOfGroups: this.state.groupList.length, courseId: this.props.location.data.courseId, groupId: this.state.groupId, recreation: true};
+
+        axios({
+            method: 'post',
+            url: '/create-grouping',
+            data: groupPackage
+        }).then((response) => {
+            this.setState({
+                ruleList: response.data.ruleList,
+                groupList: response.data.groupList
+            })
+        });
+    };
+
+    addNewRule = () => {
+        this.state.ruleType = 'newRule';
+    };
+
     render() {
+        if(this.state.ruleType = 'newRule'){
+            this.ruleBuilder = <form>
+                <label> Pick Rule Type:  </label>
+                <select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
+                    <option value=""> Please choose a rule type.</option>
+                    <option value="notTogether"> Students cannot share group</option>
+                    <option value="together"> Students must share group</option>
+                </select>
+            </form>
+        } else if(this.state.ruleType === "notTogether"){
+
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+
+            this.ruleBuilder = <div>
+                {this.firstStudent}
+                {this.secondStudent}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+
+        } else if( this.state.ruleType === "together"){
+
+            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+
+            this.ruleBuilder = <div>
+                {this.firstStudent}
+                {this.secondStudent}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+
+        } else{
+            this.ruleBuilder = <button onClick={this.addNewRule}> Add Rule</button>
+        }
 
         return(
             <div>
@@ -62,6 +119,8 @@ class Grouping extends Component {
                         return <Rule location="view" returnState={this.state} rule={rule} index={index} courseId={this.state.courseId} deleteClick={() => this.ruleDeleteClick(index)} />
                     })}
                 </div>
+                <br/>
+                <button onClick={this.reCreateGrouping}> Run grouping with new rules</button>
             </div>
         );
     }

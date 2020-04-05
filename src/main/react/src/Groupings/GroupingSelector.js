@@ -10,7 +10,7 @@ const GroupingSelector = (props) => {
 
         <button onClick={() => history.push({
             pathname: '/courseGrouping',
-            data: {courseId: props.courseId, groupList:props.groupList, ruleList:props.ruleList}
+            data: {groupId: props.groupId, courseId: props.courseId, groupList:props.groupList, ruleList:props.ruleList}
         })}> View Grouping </button>
 
         <button  onClick={props.deleteClick}> Delete </button>

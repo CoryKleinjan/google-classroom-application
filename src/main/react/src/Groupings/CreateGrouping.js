@@ -11,7 +11,8 @@ class createGrouping extends Component {
             ruleList: [],
             studentList: [],
             firstStudent: '',
-            secondStudent: ''
+            secondStudent: '',
+            numberOfGroups: 2
         }
     }
 
@@ -33,7 +34,7 @@ class createGrouping extends Component {
 
     createGrouping = () => {
 
-        let groupPackage = {ruleReturnList: this.state.ruleList, numberOfGroups: 2, courseId: this.props.location.data.courseId};
+        let groupPackage = {ruleReturnList: this.state.ruleList, numberOfGroups: this.state.numberOfGroups, courseId: this.props.location.data.courseId, recreation: false};
         axios({
             method: 'post',
             url: '/create-grouping',
@@ -41,7 +42,7 @@ class createGrouping extends Component {
         }).then((response) => {
             this.props.history.push({
                 pathname: '/courseGrouping',
-                data: {courseId: this.props.location.data.courseId, groupList:response.data.groupList, ruleList: response.data.ruleList}
+                data: {courseId: this.props.location.data.courseId, groupList:response.data.groupList, ruleList: response.data.ruleList, groupId: response.data.groupId}
             });
         });
     };
@@ -131,6 +132,10 @@ class createGrouping extends Component {
                     </select>
                 </form>
                 {this.ruleBuilder}
+                <br/>
+                Number Of Groups
+                <input type="text" value={this.state.numberOfGroups} />
+                <br/>
                 <button type="button" onClick={this.createGrouping}>
                     Create Grouping
                 </button>

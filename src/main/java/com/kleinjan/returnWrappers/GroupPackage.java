@@ -9,6 +9,8 @@ public class GroupPackage {
     List<RuleReturn> ruleReturnList = new ArrayList();
     Integer courseId;
     Integer numberOfGroups;
+    Integer groupId;
+    Boolean recreation;
 
     public Integer getCourseId() {
         return courseId;
@@ -32,5 +34,21 @@ public class GroupPackage {
 
     public void setRuleReturnList(List<RuleReturn> ruleReturnList) {
         this.ruleReturnList = ruleReturnList;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Boolean getRecreation() {
+        return recreation;
+    }
+
+    public void setRecreation(Boolean recreation) {
+        this.recreation = recreation;
     }
 }
