@@ -5,8 +5,6 @@ const GroupingSelector = (props) => {
 
     let history = useHistory();
 
-    console.log(props);
-
     return <div>
         <p>Group {props.groupId}</p>
 

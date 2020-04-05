@@ -47,8 +47,6 @@ class Grouping extends Component {
 
     render() {
 
-        console.log(this.state);
-
         return(
             <div>
                 <b>Groups</b>
