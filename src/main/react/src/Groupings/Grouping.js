@@ -61,7 +61,7 @@ class Grouping extends Component {
                 <b>Rules</b>
                 <div >
                     {this.state.ruleList.map((rule, index) => {
-                        return <Rule returnState={this.state} rule={rule} index={index} courseId={this.state.courseId} deleteClick={() => this.ruleDeleteClick(index)} />
+                        return <Rule location="view" returnState={this.state} rule={rule} index={index} courseId={this.state.courseId} deleteClick={() => this.ruleDeleteClick(index)} />
                     })}
                 </div>
             </div>

@@ -120,7 +120,7 @@ class createGrouping extends Component {
             <div>
                 <p> Rules </p>
                 {this.state.ruleList.map((rule, index) => {
-                    return <Rule deleteClick={() => this.deleteRule(index)} rule={rule} />
+                    return <Rule location="create" deleteClick={() => this.deleteRule(index)} rule={rule} />
                 })}
                 <form>
                     <label> Pick Rule Type:  </label>

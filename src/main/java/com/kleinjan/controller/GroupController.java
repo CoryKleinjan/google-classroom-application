@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -188,9 +189,13 @@ public class GroupController {
         ClassGroup group = groupService.getById(groupId);
         List<Student> studentList = group.getStudents();
 
-        for(Student student : studentList){
-            if(student.getStudentId() == studentId){
-                studentList.remove(student);
+        Iterator<Student> iter = studentList.iterator();
+
+        while (iter.hasNext()) {
+            Student student = iter.next();
+
+            if (student.getStudentId() == studentId) {
+                iter.remove();
             }
         }
 
@@ -198,7 +203,7 @@ public class GroupController {
         groupService.save(group);
     }
 
-    @RequestMapping("/add-new-student-to-group")
+    @RequestMapping("/add-student-to-group")
     public StudentReturn addNewStudentToGroup(@RequestParam Integer studentId, @RequestParam Integer groupId){
         ClassGroup group = groupService.getById(groupId);
         List<Student> studentList = group.getStudents();
@@ -210,6 +215,33 @@ public class GroupController {
 
         StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
         return studentReturn;
+    }
+
+    @RequestMapping("/get-students-not-in-group")
+    public List<StudentReturn> loadStudentsNotInGroup(@RequestParam Integer courseId){
+        Course course = courseService.findByCourseId(courseId);
+        List<Grouping> groupingList = course.getGroupings();
+
+        List<Student> studentList = course.getStudents();
+
+        for(Grouping grouping : groupingList){
+            for(ClassGroup group : grouping.getClassGroups()){
+                for(Student student : group.getStudents()){
+                    if(studentList.contains(student)){
+                        studentList.remove(student);
+                    }
+                }
+            }
+        }
+
+        List<StudentReturn> returnList = new ArrayList();
+
+        for(Student student : studentList){
+            StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
+            returnList.add(studentReturn);
+        }
+
+        return returnList;
     }
 
     private Grouping saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId){

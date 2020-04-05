@@ -17,6 +17,20 @@ class editGroup extends Component {
         }
     }
 
+    componentDidMount() {
+        this.loadStudentNotInGroup();
+    }
+
+    loadStudentNotInGroup = () => {
+        axios({
+            method: 'get',
+            url: '/get-students-not-in-group',
+            params: { courseId: this.state.courseId}
+        }).then((response) => {
+            this.state.studentList = response.data;
+        });
+    };
+
     studentDeleteClick = (index) => {
         axios({
             method: 'post',
@@ -38,7 +52,11 @@ class editGroup extends Component {
 
     returnClick = () => {
         let returnState = this.state.returnState;
-        returnState.groupList[this.state.index] = this.state.group;
+        let groupObject = {
+            groupId: this.state.groupId,
+            studentList: this.state.group
+        };
+        returnState.groupList[this.state.index] = groupObject;
 
         this.setState({
             returnState: returnState
@@ -60,7 +78,7 @@ class editGroup extends Component {
         axios({
             method: 'post',
             url: '/add-student-to-group',
-            params: { studentId: this.state.student.studentId, groupId: this.state.groupId}
+            params: { studentId: this.state.student, groupId: this.state.groupId}
         }).then((response) => {
             this.state.group.push(response.data);
             this.forceUpdate()
