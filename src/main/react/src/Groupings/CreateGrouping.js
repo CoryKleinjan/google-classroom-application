@@ -12,7 +12,8 @@ class createGrouping extends Component {
             studentList: [],
             firstStudent: '',
             secondStudent: '',
-            numberOfGroups: 2
+            numberOfGroups: 2,
+            showError: false
         }
     }
 
@@ -44,6 +45,11 @@ class createGrouping extends Component {
                 pathname: '/courseGrouping',
                 data: {courseId: this.props.location.data.courseId, groupList:response.data.groupList, ruleList: response.data.ruleList, groupId: response.data.groupId}
             });
+            this.setState({showError: false});
+            this.forceUpdate();
+        }).catch((error) => {
+            this.setState({showError: true});
+            this.forceUpdate();
         });
     };
 
@@ -117,6 +123,12 @@ class createGrouping extends Component {
             this.ruleBuilder = <div></div>
         }
 
+        if(this.state.showError === true) {
+            this.error = <span>YOUR GROUP CANT BE CREATED WITH CURRENT RULES.</span>;
+        } else{
+            this.error = '';
+        }
+
         return(
             <div>
                 <p> Rules </p>
@@ -136,6 +148,7 @@ class createGrouping extends Component {
                 Number Of Groups
                 <input type="text" value={this.state.numberOfGroups} />
                 <br/>
+                {this.error}
                 <button type="button" onClick={this.createGrouping}>
                     Create Grouping
                 </button>

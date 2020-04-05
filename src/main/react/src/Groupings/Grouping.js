@@ -14,8 +14,14 @@ class Grouping extends Component {
             groupId: props.location.data.groupId,
             firstStudent: '',
             secondStudent: '',
-            ruleType: ''
+            ruleType: '',
+            studentList: [],
+            showError: false
         };
+    }
+
+    componentDidMount() {
+        this.getStudentList();
     }
 
     findWithAttr = (array, attr, value) => {
@@ -25,6 +31,18 @@ class Grouping extends Component {
             }
         }
         return -1;
+    };
+
+    getStudentList = () => {
+        axios({
+            method: 'get',
+            url: '/get-student-list-by-course',
+            params: {
+                courseId: this.state.courseId,
+            }
+        }).then((response) => {
+            this.setState({studentList: response.data});
+        });
     };
 
     groupDeleteClick = (index) => {
@@ -61,15 +79,59 @@ class Grouping extends Component {
                 ruleList: response.data.ruleList,
                 groupList: response.data.groupList
             })
+            this.setState({showError: false});
+            this.forceUpdate();
+        }).catch((error) => {
+            this.setState({showError: true});
+            this.forceUpdate();
         });
     };
 
     addNewRule = () => {
         this.state.ruleType = 'newRule';
+        this.forceUpdate()
+    };
+
+    submitRule = () => {
+        let rule = {};
+        let ruleList = this.state.ruleList;
+
+        rule.ruleType = this.state.ruleType;
+        rule.firstStudentId = this.state.firstStudent;
+        rule.secondStudentId = this.state.secondStudent;
+
+        ruleList.push(rule);
+
+        this.setState({
+            ruleList: ruleList,
+            ruleType: '',
+            firstStudent: '',
+            secondStudent: ''
+        });
+
+        this.forceUpdate();
+    };
+
+    firstStudentChangeHandler = event => {
+        this.setState({
+            firstStudent: event.target.value
+        });
+    };
+
+    secondStudentChangeHandler = event => {
+        this.setState({
+            secondStudent: event.target.value
+        });
+    };
+
+    ruleTypeChangeHandler = event => {
+        this.setState({
+            ruleType: event.target.value
+        });
     };
 
     render() {
-        if(this.state.ruleType = 'newRule'){
+        if(this.state.ruleType === 'newRule'){
             this.ruleBuilder = <form>
                 <label> Pick Rule Type:  </label>
                 <select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
@@ -104,6 +166,12 @@ class Grouping extends Component {
             this.ruleBuilder = <button onClick={this.addNewRule}> Add Rule</button>
         }
 
+        if(this.state.showError === true) {
+            this.error = <span>YOUR GROUP CANT BE CREATED WITH CURRENT RULES.</span>;
+        } else{
+            this.error = '';
+        }
+
         return(
             <div>
                 <b>Groups</b>
@@ -118,8 +186,10 @@ class Grouping extends Component {
                     {this.state.ruleList.map((rule, index) => {
                         return <Rule location="view" returnState={this.state} rule={rule} index={index} courseId={this.state.courseId} deleteClick={() => this.ruleDeleteClick(index)} />
                     })}
+                    {this.ruleBuilder}
                 </div>
                 <br/>
+                {this.error}
                 <button onClick={this.reCreateGrouping}> Run grouping with new rules</button>
             </div>
         );

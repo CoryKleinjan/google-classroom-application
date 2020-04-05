@@ -34,98 +34,90 @@ public class GroupController {
     @RequestMapping("/create-grouping")
     public GroupingReturn createGrouping(@RequestBody GroupPackage groupPackage){
 
-        GroupingReturn groupR = new GroupingReturn(1, 1);
-        try {
-            Integer courseId = groupPackage.getCourseId();
-            Integer numberOfGroups = groupPackage.getNumberOfGroups();
+        Integer courseId = groupPackage.getCourseId();
+        Integer numberOfGroups = groupPackage.getNumberOfGroups();
 
-            Course course = courseService.findByCourseId(courseId);
-            List<List<Student>> groupingList = new ArrayList<>();
-            List<Student> studentList = new ArrayList(course.getStudents());
-            List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
-            Integer currentGroup = 0;
+        Course course = courseService.findByCourseId(courseId);
+        List<List<Student>> groupingList = new ArrayList<>();
+        List<Student> studentList = new ArrayList(course.getStudents());
+        List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
+        Integer currentGroup = 0;
 
-            for (int i = 0; i < numberOfGroups; i++) {
-                groupingList.add(new ArrayList<Student>());
-            }
-
-            for (Rule rule : ruleList) {
-                switch (rule.getType()) {
-                    case "notTogether":
-                        groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
-                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                        studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
-
-                        groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
-                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                        studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
-
-                        break;
-                    default:
-                }
-            }
-
-            Integer averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
-            for (Student student : studentList) {
-                for (List<Student> group : groupingList) {
-                    if (group.size() <= averageGroupSize) {
-                        group.add(student);
-                        break;
-                    }
-                }
-
-                averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
-            }
-
-            Grouping savedGrouping;
-            if(groupPackage.getRecreation()){
-                savedGrouping = saveGrouping(groupingList, ruleList, courseId, true, groupPackage.getGroupId());
-            } else{
-                savedGrouping = saveGrouping(groupingList, ruleList, courseId, false, null);
-            }
-
-            List<GroupReturn> gList = new ArrayList();
-            for (ClassGroup group : savedGrouping.getClassGroups()) {
-                GroupReturn groupReturn = new GroupReturn(group.getGroupId());
-
-                List<StudentReturn> sList = new ArrayList();
-                for (Student student : group.getStudents()) {
-                    StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
-
-                    sList.add(studentReturn);
-                }
-                groupReturn.setStudentList(sList);
-
-                gList.add(groupReturn);
-            }
-
-            List<RuleReturn> rList = new ArrayList();
-            for (Rule rule : savedGrouping.getRules()) {
-                RuleReturn ruleReturn = new RuleReturn();
-
-                ruleReturn.setRuleType(rule.getType());
-                if(rule.getId() != null) {
-                    ruleReturn.setRuleId(rule.getId());
-                }
-                try {
-                    ruleReturn.setFirstStudentId(rule.getFirstStudent());
-                    ruleReturn.setSecondStudentId(rule.getSecondStudent());
-                } catch (NullPointerException e) {
-                }
-
-                rList.add(ruleReturn);
-            }
-
-            GroupingReturn groupingReturn = new GroupingReturn(savedGrouping.getCourseId(), savedGrouping.getGroupingId());
-            groupingReturn.setGroupList(gList);
-            groupingReturn.setRuleList(rList);
-
-            return groupingReturn;
-        } catch(Exception e){
-            e.printStackTrace();
+        for (int i = 0; i < numberOfGroups; i++) {
+            groupingList.add(new ArrayList<Student>());
         }
 
-        return groupR;
+        for (Rule rule : ruleList) {
+            switch (rule.getType()) {
+                case "notTogether":
+                    groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
+                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                    studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
+
+                    groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
+                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                    studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
+
+                    break;
+                    default:
+            }
+        }
+
+        Integer averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
+        for (Student student : studentList) {
+            for (List<Student> group : groupingList) {
+                if (group.size() <= averageGroupSize) {
+                    group.add(student);
+                    break;
+                }
+            }
+
+            averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
+        }
+
+        Grouping savedGrouping;
+        if(groupPackage.getRecreation()){
+            savedGrouping = saveGrouping(groupingList, ruleList, courseId, true, groupPackage.getGroupId());
+        } else{
+            savedGrouping = saveGrouping(groupingList, ruleList, courseId, false, null);
+        }
+
+        List<GroupReturn> gList = new ArrayList();
+        for (ClassGroup group : savedGrouping.getClassGroups()) {
+            GroupReturn groupReturn = new GroupReturn(group.getGroupId());
+
+            List<StudentReturn> sList = new ArrayList();
+            for (Student student : group.getStudents()) {
+                StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
+
+                sList.add(studentReturn);
+            }
+            groupReturn.setStudentList(sList);
+
+            gList.add(groupReturn);
+        }
+
+        List<RuleReturn> rList = new ArrayList();
+        for (Rule rule : savedGrouping.getRules()) {
+            RuleReturn ruleReturn = new RuleReturn();
+
+            ruleReturn.setRuleType(rule.getType());
+            if(rule.getId() != null) {
+                ruleReturn.setRuleId(rule.getId());
+            }
+            try {
+                ruleReturn.setFirstStudentId(rule.getFirstStudent());
+                ruleReturn.setSecondStudentId(rule.getSecondStudent());
+            } catch (NullPointerException e) {
+            }
+             rList.add(ruleReturn);
+        }
+
+        GroupingReturn groupingReturn = new GroupingReturn(savedGrouping.getCourseId(), savedGrouping.getGroupingId());
+        groupingReturn.setGroupList(gList);
+        groupingReturn.setRuleList(rList);
+
+        return groupingReturn;
     }
 
     @RequestMapping("load-groupings-by-course-id")
