@@ -50,16 +50,44 @@ public class GroupController {
         for (Rule rule : ruleList) {
             switch (rule.getType()) {
                 case "notTogether":
-                    groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
-                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                    studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
+                    if( isStudentInGroup(groupingList, rule.getFirstStudent()) > 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) > 0){
 
-                    groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
-                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                    studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
+                    } else if(isStudentInGroup(groupingList, rule.getFirstStudent()) > 0){
+
+                    } else if(isStudentInGroup(groupingList, rule.getSecondStudent()) > 0) {
+
+                    } else {
+                        groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
+                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                        studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
+
+                        groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
+                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                        studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
+                    }
 
                     break;
-                    default:
+                case "together":
+                    if( isStudentInGroup(groupingList, rule.getFirstStudent()) > 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) > 0){
+
+                    } else if(isStudentInGroup(groupingList, rule.getFirstStudent()) > 0){
+
+                    } else if(isStudentInGroup(groupingList, rule.getSecondStudent()) > 0) {
+
+                    } else {
+
+                    }
+                    break;
+                case "grademix":
+                    break;
+                case "topInEach":
+                    break;
+                case "bottomInEach":
+                    break;
+                case "gradesTogether":
+                    break;
+                case "random":
+                    break;
             }
         }
 
@@ -239,6 +267,19 @@ public class GroupController {
         }
 
         return returnList;
+    }
+
+    public Integer isStudentInGroup(List<List<Student>> groupingList, Integer studentId){
+
+        for(List<Student> sList : groupingList){
+            for(Student student : sList){
+                if(student.getStudentId() == studentId){
+                    return groupingList.indexOf(sList);
+                }
+            }
+        }
+
+        return -1;
     }
 
     private Grouping saveGrouping(List<List<Student>> groupingList, List<Rule> ruleList, Integer courseId, Boolean recreation, Integer groupingId){
