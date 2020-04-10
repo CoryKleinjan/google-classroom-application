@@ -32,4 +32,16 @@ public class RuleController {
 
         ruleService.save(rule);
     }
+
+    @RequestMapping("/create-rule")
+    public Integer createRule(@RequestBody RuleReturn ruleReturn){
+        Rule rule = new Rule();
+        rule.setType(ruleReturn.getRuleType());
+        rule.setFirstStudent(ruleReturn.getFirstStudentId());
+        rule.setSecondStudent(ruleReturn.getSecondStudentId());
+
+        rule = ruleService.save(rule);
+
+        return rule.getId();
+    }
 }

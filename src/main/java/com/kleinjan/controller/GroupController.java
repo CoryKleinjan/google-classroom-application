@@ -32,120 +32,181 @@ public class GroupController {
     RuleService ruleService;
 
     @RequestMapping("/create-grouping")
-    public GroupingReturn createGrouping(@RequestBody GroupPackage groupPackage){
+    public GroupingReturn createGrouping(@RequestBody GroupPackage groupPackage) throws Exception{
 
-        Integer courseId = groupPackage.getCourseId();
-        Integer numberOfGroups = groupPackage.getNumberOfGroups();
+        try {
+            Integer courseId = groupPackage.getCourseId();
+            Integer numberOfGroups = groupPackage.getNumberOfGroups();
 
-        Course course = courseService.findByCourseId(courseId);
-        List<List<Student>> groupingList = new ArrayList<>();
-        List<Student> studentList = new ArrayList(course.getStudents());
-        List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
-        Integer currentGroup = 0;
+            Course course = courseService.findByCourseId(courseId);
+            List<List<Student>> groupingList = new ArrayList<>();
+            List<Student> studentList = new ArrayList(course.getStudents());
+            List<Rule> ruleList = createRuleList(groupPackage.getRuleReturnList());
+            Integer currentGroup = 0;
 
-        for (int i = 0; i < numberOfGroups; i++) {
-            groupingList.add(new ArrayList<Student>());
-        }
-
-        for (Rule rule : ruleList) {
-            switch (rule.getType()) {
-                case "notTogether":
-                    if( isStudentInGroup(groupingList, rule.getFirstStudent()) > 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) > 0){
-
-                    } else if(isStudentInGroup(groupingList, rule.getFirstStudent()) > 0){
-
-                    } else if(isStudentInGroup(groupingList, rule.getSecondStudent()) > 0) {
-
-                    } else {
-                        groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
-                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                        studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
-
-                        groupingList.get(groupingList.size() - 1).add(getStudentFromList(studentList, rule.getSecondStudent()));
-                        currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
-                        studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
-                    }
-
-                    break;
-                case "together":
-                    if( isStudentInGroup(groupingList, rule.getFirstStudent()) > 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) > 0){
-
-                    } else if(isStudentInGroup(groupingList, rule.getFirstStudent()) > 0){
-
-                    } else if(isStudentInGroup(groupingList, rule.getSecondStudent()) > 0) {
-
-                    } else {
-
-                    }
-                    break;
-                case "grademix":
-                    break;
-                case "topInEach":
-                    break;
-                case "bottomInEach":
-                    break;
-                case "gradesTogether":
-                    break;
-                case "random":
-                    break;
+            for (int i = 0; i < numberOfGroups; i++) {
+                groupingList.add(new ArrayList<Student>());
             }
-        }
 
-        Integer averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
-        for (Student student : studentList) {
-            for (List<Student> group : groupingList) {
-                if (group.size() <= averageGroupSize) {
-                    group.add(student);
-                    break;
+            for (Rule rule : ruleList) {
+                switch (rule.getType()) {
+                    case "notTogether":
+                        if (isStudentInGroup(groupingList, rule.getFirstStudent()) >= 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) >= 0) {
+                            if (isStudentInGroup(groupingList, rule.getFirstStudent()) != isStudentInGroup(groupingList, rule.getSecondStudent())) {
+                                break;
+                            } else {
+                                Student student = getStudentFromStudentListById(studentList, rule.getSecondStudent());
+                                groupingList.get(isStudentInGroup(groupingList, rule.getSecondStudent())).remove(student);
+
+                                if (currentGroup != isStudentInGroup(groupingList, rule.getSecondStudent())) {
+                                    groupingList.get(currentGroup).add(student);
+                                    studentList.remove(student);
+                                } else {
+                                    currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                                    groupingList.get(currentGroup).add(student);
+                                    studentList.remove(student);
+                                }
+                                groupingList.get(isStudentInGroup(groupingList, rule.getSecondStudent()));
+                            }
+                        } else if (isStudentInGroup(groupingList, rule.getFirstStudent()) >= 0) {
+                            Student secondStudent = getStudentFromStudentListById(studentList, rule.getSecondStudent());
+
+                            if (currentGroup != isStudentInGroup(groupingList, rule.getFirstStudent())) {
+                                groupingList.get(currentGroup).add(secondStudent);
+                                studentList.remove(secondStudent);
+                            } else {
+                                currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                                groupingList.get(currentGroup).add(secondStudent);
+                                studentList.remove(secondStudent);
+                            }
+                        } else if (isStudentInGroup(groupingList, rule.getSecondStudent()) >= 0) {
+                            Student firstStudent = getStudentFromStudentListById(studentList, rule.getFirstStudent());
+
+                            if (currentGroup != isStudentInGroup(groupingList, rule.getSecondStudent())) {
+                                groupingList.get(currentGroup).add(firstStudent);
+                                studentList.remove(firstStudent);
+                            } else {
+                                currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                                groupingList.get(currentGroup).add(firstStudent);
+                                studentList.remove(firstStudent);
+                            }
+                        } else {
+                            groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
+                            currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                            studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
+
+                            groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getSecondStudent()));
+                            currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                            studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
+                        }
+
+                        break;
+                    case "together":
+                        if (isStudentInGroup(groupingList, rule.getFirstStudent()) >= 0 && isStudentInGroup(groupingList, rule.getSecondStudent()) >= 0) {
+                            if (isStudentInGroup(groupingList, rule.getFirstStudent()) == isStudentInGroup(groupingList, rule.getSecondStudent())) {
+                                break;
+                            } else {
+                                Student student = getStudentFromStudentListById(studentList, rule.getSecondStudent());
+                                groupingList.get(isStudentInGroup(groupingList, rule.getSecondStudent())).remove(student);
+
+                                groupingList.get(isStudentInGroup(groupingList,rule.getFirstStudent())).add(student);
+                                studentList.remove(student);
+
+                                groupingList.get(isStudentInGroup(groupingList, rule.getSecondStudent()));
+                            }
+                        } else if (isStudentInGroup(groupingList, rule.getFirstStudent()) >= 0) {
+                            Student secondStudent = getStudentFromStudentListById(studentList, rule.getSecondStudent());
+
+                            groupingList.get(isStudentInGroup(groupingList,rule.getFirstStudent())).add(secondStudent);
+                            studentList.remove(secondStudent);
+
+                        } else if (isStudentInGroup(groupingList, rule.getSecondStudent()) >= 0) {
+                            Student firstStudent = getStudentFromStudentListById(studentList, rule.getFirstStudent());
+
+                            groupingList.get(isStudentInGroup(groupingList,rule.getSecondStudent())).add(firstStudent);
+                            studentList.remove(firstStudent);
+                        } else {
+                            groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getFirstStudent()));
+                            studentList.remove(getStudentFromList(studentList, rule.getFirstStudent()));
+
+                            groupingList.get(currentGroup).add(getStudentFromList(studentList, rule.getSecondStudent()));
+                            studentList.remove(getStudentFromList(studentList, rule.getSecondStudent()));
+
+                            currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                        }
+                        break;
+                    case "grademix":
+                        break;
+                    case "topInEach":
+                        break;
+                    case "bottomInEach":
+                        break;
+                    case "gradesTogether":
+                        break;
+                    case "random":
+                        break;
                 }
             }
 
-            averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
-        }
+            Integer averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
+            for (Student student : studentList) {
+                for (List<Student> group : groupingList) {
+                    if (group.size() <= averageGroupSize) {
+                        group.add(student);
+                        break;
+                    }
+                }
 
-        Grouping savedGrouping;
-        if(groupPackage.getRecreation()){
-            savedGrouping = saveGrouping(groupingList, ruleList, courseId, true, groupPackage.getGroupId());
-        } else{
-            savedGrouping = saveGrouping(groupingList, ruleList, courseId, false, null);
-        }
-
-        List<GroupReturn> gList = new ArrayList();
-        for (ClassGroup group : savedGrouping.getClassGroups()) {
-            GroupReturn groupReturn = new GroupReturn(group.getGroupId());
-
-            List<StudentReturn> sList = new ArrayList();
-            for (Student student : group.getStudents()) {
-                StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
-
-                sList.add(studentReturn);
+                averageGroupSize = getAverageGroupSize(groupingList, numberOfGroups);
             }
-            groupReturn.setStudentList(sList);
 
-            gList.add(groupReturn);
-        }
-
-        List<RuleReturn> rList = new ArrayList();
-        for (Rule rule : savedGrouping.getRules()) {
-            RuleReturn ruleReturn = new RuleReturn();
-
-            ruleReturn.setRuleType(rule.getType());
-            if(rule.getId() != null) {
-                ruleReturn.setRuleId(rule.getId());
+            Grouping savedGrouping;
+            if (groupPackage.getRecreation()) {
+                savedGrouping = saveGrouping(groupingList, ruleList, courseId, true, groupPackage.getGroupId());
+            } else {
+                savedGrouping = saveGrouping(groupingList, ruleList, courseId, false, null);
             }
-            try {
-                ruleReturn.setFirstStudentId(rule.getFirstStudent());
-                ruleReturn.setSecondStudentId(rule.getSecondStudent());
-            } catch (NullPointerException e) {
+
+            List<GroupReturn> gList = new ArrayList();
+            for (ClassGroup group : savedGrouping.getClassGroups()) {
+                GroupReturn groupReturn = new GroupReturn(group.getGroupId());
+
+                List<StudentReturn> sList = new ArrayList();
+                for (Student student : group.getStudents()) {
+                    StudentReturn studentReturn = new StudentReturn(student.getName(), student.getStudentId());
+
+                    sList.add(studentReturn);
+                }
+                groupReturn.setStudentList(sList);
+
+                gList.add(groupReturn);
             }
-             rList.add(ruleReturn);
+
+            List<RuleReturn> rList = new ArrayList();
+            for (Rule rule : savedGrouping.getRules()) {
+                RuleReturn ruleReturn = new RuleReturn();
+
+                ruleReturn.setRuleType(rule.getType());
+                if (rule.getId() != null) {
+                    ruleReturn.setRuleId(rule.getId());
+                }
+                try {
+                    ruleReturn.setFirstStudentId(rule.getFirstStudent());
+                    ruleReturn.setSecondStudentId(rule.getSecondStudent());
+                } catch (NullPointerException e) {
+                }
+                rList.add(ruleReturn);
+            }
+
+            GroupingReturn groupingReturn = new GroupingReturn(savedGrouping.getCourseId(), savedGrouping.getGroupingId());
+            groupingReturn.setGroupList(gList);
+            groupingReturn.setRuleList(rList);
+
+            return groupingReturn;
+        }catch(Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-
-        GroupingReturn groupingReturn = new GroupingReturn(savedGrouping.getCourseId(), savedGrouping.getGroupingId());
-        groupingReturn.setGroupList(gList);
-        groupingReturn.setRuleList(rList);
-
-        return groupingReturn;
     }
 
     @RequestMapping("load-groupings-by-course-id")
@@ -267,6 +328,18 @@ public class GroupController {
         }
 
         return returnList;
+    }
+
+    public Student getStudentFromStudentListById(List<Student> studentList, Integer studentId){
+        Student returnStudent = new Student();
+
+        for(Student student : studentList){
+            if(student.getStudentId() == studentId){
+                returnStudent = student;
+            }
+        }
+
+        return returnStudent;
     }
 
     public Integer isStudentInGroup(List<List<Student>> groupingList, Integer studentId){

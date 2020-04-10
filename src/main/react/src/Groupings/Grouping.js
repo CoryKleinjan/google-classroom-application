@@ -100,13 +100,21 @@ class Grouping extends Component {
         rule.firstStudentId = this.state.firstStudent;
         rule.secondStudentId = this.state.secondStudent;
 
-        ruleList.push(rule);
+        axios({
+            method: 'post',
+            url: '/create-rule',
+            data: rule
+        }).then((response) => {
+            rule.ruleId = response.data;
 
-        this.setState({
-            ruleList: ruleList,
-            ruleType: '',
-            firstStudent: '',
-            secondStudent: ''
+            ruleList.push(rule);
+
+            this.setState({
+                ruleList: ruleList,
+                ruleType: '',
+                firstStudent: '',
+                secondStudent: ''
+            });
         });
 
         this.forceUpdate();
