@@ -91,6 +91,18 @@ class editRule extends Component {
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
 
+        } else if( this.state.rule.ruleType === "topInEach"){
+
+            this.rule = <div>
+                {this.state.rule.ruleType}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+        } else if( this.state.rule.ruleType === "bottomInEach"){
+
+            this.rule = <div>
+                {this.state.rule.ruleType}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
         }
 
         return(

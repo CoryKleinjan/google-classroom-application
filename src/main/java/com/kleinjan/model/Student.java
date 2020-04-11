@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student implements Comparable<Student>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")
@@ -30,4 +30,22 @@ public class Student {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "student_id")
     private List<Assignment> assignments;
+
+    @Override
+    public int compareTo(Student second){
+        List<Assignment> firstAssignments = getAssignments();
+        List<Assignment> secondAssignments = second.getAssignments();
+
+        Double firstGrade = 0.0;
+        Double secondGrade = 0.0;
+
+        for(Assignment assignment : firstAssignments){
+            firstGrade += assignment.getGrade();
+        }
+        for(Assignment assignment : secondAssignments){
+            secondGrade += assignment.getGrade();
+        }
+
+        return firstGrade.compareTo(secondGrade);
+    }
 }

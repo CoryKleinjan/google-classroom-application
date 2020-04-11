@@ -119,6 +119,18 @@ class createGrouping extends Component {
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
 
+        } else if( this.state.ruleType === "topInEach"){
+
+            this.rule = <div>
+                {this.state.ruleType}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+        } else if( this.state.ruleType === "bottomInEach"){
+
+            this.rule = <div>
+                {this.state.ruleType}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
         } else{
             this.ruleBuilder = <div></div>
         }

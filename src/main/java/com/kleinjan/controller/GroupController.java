@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,6 +48,8 @@ public class GroupController {
             for (int i = 0; i < numberOfGroups; i++) {
                 groupingList.add(new ArrayList<Student>());
             }
+
+            Collections.sort(studentList);
 
             for (Rule rule : ruleList) {
                 switch (rule.getType()) {
@@ -135,11 +138,30 @@ public class GroupController {
                             currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
                         }
                         break;
-                    case "grademix":
-                        break;
                     case "topInEach":
+                        Collections.reverse(studentList);
+
+                        for(int i = 0; i < numberOfGroups; i++) {
+                            Student student = studentList.get(0);
+
+                            groupingList.get(currentGroup).add(student);
+                            studentList.remove(0);
+
+                            iterateCurrentGroup(currentGroup, numberOfGroups);
+                        }
+
+                        Collections.sort(studentList);
                         break;
                     case "bottomInEach":
+
+                        for(int i = 0; i < numberOfGroups; i++) {
+                            Student student = studentList.get(0);
+
+                            groupingList.get(currentGroup).add(student);
+                            studentList.remove(0);
+
+                            iterateCurrentGroup(currentGroup, numberOfGroups);
+                        }
                         break;
                     case "gradesTogether":
                         break;
