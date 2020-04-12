@@ -17,20 +17,6 @@ class editGroup extends Component {
         }
     }
 
-    componentDidMount() {
-        this.loadStudentNotInGroup();
-    }
-
-    loadStudentNotInGroup = () => {
-        axios({
-            method: 'get',
-            url: '/get-students-not-in-group',
-            params: { courseId: this.state.courseId}
-        }).then((response) => {
-            this.state.studentList = response.data;
-        });
-    };
-
     studentDeleteClick = (index) => {
         axios({
             method: 'post',

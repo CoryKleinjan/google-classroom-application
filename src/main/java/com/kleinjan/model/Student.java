@@ -25,8 +25,9 @@ public class Student implements Comparable<Student>{
     private String name;
     @ManyToMany(mappedBy = "students")
     private List<Course> courses;
-    @ManyToMany(mappedBy = "students")
-    private List<ClassGroup> classGroups;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "group_students", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private List<Student> students;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "student_id")
     private List<Assignment> assignments;

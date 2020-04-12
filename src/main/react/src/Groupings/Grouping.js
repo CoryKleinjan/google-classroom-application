@@ -78,7 +78,7 @@ class Grouping extends Component {
             this.setState({
                 ruleList: response.data.ruleList,
                 groupList: response.data.groupList
-            })
+            });
             this.setState({showError: false});
             this.forceUpdate();
         }).catch((error) => {
