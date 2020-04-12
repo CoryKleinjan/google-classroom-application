@@ -148,6 +148,7 @@ class Grouping extends Component {
                     <option value="together"> Students must share group</option>
                     <option value="topInEach"> Top student in every group</option>
                     <option value="bottomInEach"> Bottom student in every group</option>
+                    <option value="random"> Random </option>
                 </select>
             </form>
         } else if(this.state.ruleType === "notTogether"){
@@ -174,17 +175,20 @@ class Grouping extends Component {
 
         } else if( this.state.ruleType === "topInEach"){
 
-            this.rule = <div>
-                {this.state.ruleType}
+            this.ruleBuilder = <div>
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
         } else if( this.state.ruleType === "bottomInEach"){
 
-            this.rule = <div>
-                {this.state.ruleType}
+            this.ruleBuilder = <div>
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
-        } else{
+        } else if( this.state.ruleType === "random"){
+
+            this.ruleBuilder = <div>
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
+        }else{
             this.ruleBuilder = <button onClick={this.addNewRule}> Add Rule</button>
         }
 

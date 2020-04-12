@@ -19,7 +19,7 @@ public class ClassGroup {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "group_id")
     private int groupId;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "group_students", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
 }

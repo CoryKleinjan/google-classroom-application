@@ -49,8 +49,6 @@ public class GroupController {
                 groupingList.add(new ArrayList<Student>());
             }
 
-            Collections.sort(studentList);
-
             for (Rule rule : ruleList) {
                 switch (rule.getType()) {
                     case "notTogether":
@@ -139,6 +137,7 @@ public class GroupController {
                         }
                         break;
                     case "topInEach":
+                        Collections.sort(studentList);
                         Collections.reverse(studentList);
 
                         for(int i = 0; i < numberOfGroups; i++) {
@@ -147,12 +146,13 @@ public class GroupController {
                             groupingList.get(currentGroup).add(student);
                             studentList.remove(0);
 
-                            iterateCurrentGroup(currentGroup, numberOfGroups);
+                            currentGroup =iterateCurrentGroup(currentGroup, numberOfGroups);
                         }
 
                         Collections.sort(studentList);
                         break;
                     case "bottomInEach":
+                        Collections.sort(studentList);
 
                         for(int i = 0; i < numberOfGroups; i++) {
                             Student student = studentList.get(0);
@@ -160,12 +160,16 @@ public class GroupController {
                             groupingList.get(currentGroup).add(student);
                             studentList.remove(0);
 
-                            iterateCurrentGroup(currentGroup, numberOfGroups);
+                            currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
                         }
                         break;
-                    case "gradesTogether":
-                        break;
                     case "random":
+                        while(studentList.size() > 0) {
+                            int index = (int) (Math.random() * (studentList.size()));
+                            groupingList.get(currentGroup).add(studentList.get(index));
+                            currentGroup = iterateCurrentGroup(currentGroup, numberOfGroups);
+                            studentList.remove(index);
+                        }
                         break;
                 }
             }
@@ -426,8 +430,10 @@ public class GroupController {
             if(ruleReturn.getRuleId() != null) {
                 rule.setId(ruleReturn.getRuleId());
             }
-            rule.setFirstStudent(studentService.findByStudentId(ruleReturn.getFirstStudentId()).getStudentId());
-            rule.setSecondStudent(studentService.findByStudentId(ruleReturn.getSecondStudentId()).getStudentId());
+            if(ruleReturn.getFirstStudentId() != null) {
+                rule.setFirstStudent(studentService.findByStudentId(ruleReturn.getFirstStudentId()).getStudentId());
+                rule.setSecondStudent(studentService.findByStudentId(ruleReturn.getSecondStudentId()).getStudentId());
+            }
 
             rule = ruleService.save(rule);
             ruleList.add(rule);

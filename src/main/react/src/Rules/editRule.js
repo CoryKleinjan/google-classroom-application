@@ -103,6 +103,12 @@ class editRule extends Component {
                 {this.state.rule.ruleType}
                 <button onClick={this.submitRule}>Submit Rule</button>
             </div>
+        } else if( this.state.rule.ruleType === "random"){
+
+            this.rule = <div>
+                {this.state.rule.ruleType}
+                <button onClick={this.submitRule}>Submit Rule</button>
+            </div>
         }
 
         return(
