@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const GroupingSelector = (props) => {
 
@@ -8,12 +9,12 @@ const GroupingSelector = (props) => {
     return <div>
         <p>Group {props.groupId}</p>
 
-        <button onClick={() => history.push({
+        <Button variant="contained" color="primary" onClick={() => history.push({
             pathname: '/courseGrouping',
             data: {groupId: props.groupId, courseId: props.courseId, groupList:props.groupList, ruleList:props.ruleList}
-        })}> View Grouping </button>
+        })}> View Grouping </Button>
 
-        <button  onClick={props.deleteClick}> Delete </button>
+        <Button variant="contained" color="primary" onClick={props.deleteClick}> Delete </Button>
 
     </div>
 };

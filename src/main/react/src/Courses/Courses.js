@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import Button from '@material-ui/core/Button';
 
 import Course from './Course';
 
@@ -47,9 +48,9 @@ class Courses extends Component {
                 {this.state.courses.map((course,index) => {
                     return <Course deleteClick={() => this.deleteCourse(index)} courseName={course.courseName} courseId={course.courseId} />
                 })}
-                <button type="button" onClick={this.importCourses}>
+                <Button variant="contained" color="primary" type="button" onClick={this.importCourses}>
                     Import Courses
-                </button>
+                </Button>
             </div>
         );
     }

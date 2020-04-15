@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import Rule from '../Rules/Rule';
+import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
 
 class createGrouping extends Component {
 
@@ -99,40 +101,40 @@ class createGrouping extends Component {
     render() {
         if(this.state.ruleType === "notTogether"){
 
-            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
-            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.firstStudent = <Select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</Select>;
+            this.secondStudent = <Select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</Select>;
 
             this.ruleBuilder = <div>
                 {this.firstStudent}
                 {this.secondStudent}
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
 
         } else if( this.state.ruleType === "together"){
 
-            this.firstStudent = <select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
-            this.secondStudent = <select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.firstStudent = <Select value={this.state.firstStudent} onChange={this.firstStudentChangeHandler}><option> Select first student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</Select>;
+            this.secondStudent = <Select value={this.state.secondStudent} onChange={this.secondStudentChangeHandler}><option> Select second student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</Select>;
 
             this.ruleBuilder = <div>
                 {this.firstStudent}
                 {this.secondStudent}
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
 
         } else if( this.state.ruleType === "topInEach"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         } else if( this.state.ruleType === "bottomInEach"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         } else if( this.state.ruleType === "random"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         } else {
             this.ruleBuilder = <div></div>
@@ -152,14 +154,14 @@ class createGrouping extends Component {
                 })}
                 <form>
                     <label> Pick Rule Type:  </label>
-                    <select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
+                    <Select value={this.state.ruleType} onChange={this.ruleTypeChangeHandler}>
                         <option value=""> Please choose a rule type.</option>
                         <option value="notTogether"> Students cannot share group</option>
                         <option value="together"> Students must share group</option>
                         <option value="topInEach"> Top student in every group</option>
                         <option value="bottomInEach"> Bottom student in every group</option>
                         <option value="random"> Random </option>
-                    </select>
+                    </Select>
                 </form>
                 {this.ruleBuilder}
                 <br/>
@@ -167,9 +169,9 @@ class createGrouping extends Component {
                 <input type="text" value={this.state.numberOfGroups} />
                 <br/>
                 {this.error}
-                <button type="button" onClick={this.createGrouping}>
+                <Button variant="contained" color="primary" type="button" onClick={this.createGrouping}>
                     Create Grouping
-                </button>
+                </Button>
             </div>
         );
     }

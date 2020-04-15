@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {useHistory} from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const Group  = (props) => {
 
@@ -11,12 +12,12 @@ const Group  = (props) => {
             {props.group.map(student => {
                 return <p>{student.studentName}</p>
             })}
-            <button onClick={() => history.push({
+            <Button variant="contained" color="primary" onClick={() => history.push({
                 pathname: '/editGroup',
                 data: {returnState: props.returnState, group: props.group, courseId: props.courseId, groupId: props.groupId, index: props.index}
-            })}> Edit </button>
+            })}> Edit </Button>
 
-            <button  onClick={props.deleteClick}> Delete </button>
+            <Button variant="contained" color="primary" onClick={props.deleteClick}> Delete </Button>
         </div>
     );
 };

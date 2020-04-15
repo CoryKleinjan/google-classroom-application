@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Student from "../Students/Student";
 import axios from "axios";
+import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
 
 class editGroup extends Component {
 
@@ -79,12 +81,12 @@ class editGroup extends Component {
     render() {
 
         if(this.state.newStudent){
-            this.student = <select value={this.state.student} onChange={this.studentChangeHandler}><option> Select student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</select>;
+            this.student = <Select value={this.state.student} onChange={this.studentChangeHandler}><option> Select student</option>{this.state.studentList.map( (student) => <option value={student.studentId} key={student.studentName}>{student.studentName}</option>)}</Select>;
 
             this.studentBuilder = <div>
                 {this.student}
-                <button onClick={this.addStudentHandler}> Add Student</button>
-                <button onClick={this.cancelAddStudent}> Cancel </button>
+                <Button variant="contained" color="primary" onClick={this.addStudentHandler}> Add Student</Button>
+                <Button variant="contained" color="primary" onClick={this.cancelAddStudent}> Cancel </Button>
             </div>
         } else{
             this.studentBuilder = <button onClick={this.addStudentClick}> Add Student </button>;
@@ -98,7 +100,7 @@ class editGroup extends Component {
                 })}
 
                 {this.studentBuilder}
-                <button onClick={this.returnClick}> Return to Grouping </button>
+                <Button variant="contained" color="primary" onClick={this.returnClick}> Return to Grouping </Button>
             </div>
         );
     }

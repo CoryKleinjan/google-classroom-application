@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Group from "../Groups/Group";
 import axios from "axios";
 import Rule from "../Rules/Rule";
+import Button from "@material-ui/core/Button";
 
 class Grouping extends Component {
 
@@ -159,7 +160,7 @@ class Grouping extends Component {
             this.ruleBuilder = <div>
                 {this.firstStudent}
                 {this.secondStudent}
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
 
         } else if( this.state.ruleType === "together"){
@@ -170,26 +171,26 @@ class Grouping extends Component {
             this.ruleBuilder = <div>
                 {this.firstStudent}
                 {this.secondStudent}
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
 
         } else if( this.state.ruleType === "topInEach"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         } else if( this.state.ruleType === "bottomInEach"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         } else if( this.state.ruleType === "random"){
 
             this.ruleBuilder = <div>
-                <button onClick={this.submitRule}>Submit Rule</button>
+                <Button variant="contained" color="primary" onClick={this.submitRule}>Submit Rule</Button>
             </div>
         }else{
-            this.ruleBuilder = <button onClick={this.addNewRule}> Add Rule</button>
+            this.ruleBuilder = <Button variant="contained" color="primary" onClick={this.addNewRule}> Add Rule</Button>
         }
 
         if(this.state.showError === true) {
@@ -216,7 +217,7 @@ class Grouping extends Component {
                 </div>
                 <br/>
                 {this.error}
-                <button onClick={this.reCreateGrouping}> Run grouping with new rules</button>
+                <Button variant="contained" color="primary" onClick={this.reCreateGrouping}> Run grouping with new rules</Button>
             </div>
         );
     }

@@ -133,6 +133,17 @@
                     </execution>
 
                     <execution>
+                        <id>import material ui</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install @material-ui/core</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>build react application</id>
                         <goals>
                             <goal>npm</goal>
