@@ -88,6 +88,30 @@ class Grouping extends Component {
         });
     };
 
+    downloadGrouping = () => {
+        let groupPackage = {ruleReturnList: this.state.ruleList, numberOfGroups: this.state.groupList.length, courseId: this.props.location.data.courseId, groupId: this.state.groupId, recreation: true};
+
+        axios({
+            method: 'post',
+            responseType:'blob',
+            url: '/download-grouping',
+            headers:{
+                'Content-type':'application/json',
+                'Accept':'application/msword'
+            },
+            data: groupPackage
+        }).then((response) => {
+            let csvData = new Blob([response.data],{type:'text/csv'});
+            let a = document.createElement('a');
+            let csvUrl = URL.createObjectURL(csvData);
+            a.href = csvUrl;
+            a.setAttribute('download', 'grouping.docx');
+            a.click();
+            URL.revokeObjectURL(a.href);
+            a.remove();
+        });
+    };
+
     addNewRule = () => {
         this.state.ruleType = 'newRule';
         this.forceUpdate()
@@ -218,6 +242,7 @@ class Grouping extends Component {
                 <br/>
                 {this.error}
                 <Button variant="contained" color="primary" onClick={this.reCreateGrouping}> Run grouping with new rules</Button>
+                <Button variant="contained" color="primary" onClick={this.downloadGrouping}> Download Grouping </Button>
             </div>
         );
     }
