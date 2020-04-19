@@ -17,8 +17,22 @@ const Rule = (props) => {
         })}> Edit </Button>
     }
 
+    let ruleDisplay
+
+    if(props.rule.ruleType === "notTogether"){
+        ruleDisplay = "Not together";
+    } else if(props.rule.ruleType === "together"){
+        ruleDisplay = "Together";
+    } else if(props.rule.ruleType === "topInEach"){
+        ruleDisplay = "Top student in each group";
+    } else if(props.rule.ruleType === "bottomInEach"){
+        ruleDisplay = "Struggling student in each group";
+    } else if(props.rule.ruleType === "random"){
+        ruleDisplay = "Random";
+    }
+
     return <div>
-        <p>{props.rule.ruleType}</p>
+        <p>{ruleDisplay}</p>
 
         {editButton}
 

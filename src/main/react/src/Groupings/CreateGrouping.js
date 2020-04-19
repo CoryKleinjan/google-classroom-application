@@ -148,7 +148,7 @@ class createGrouping extends Component {
 
         return(
             <div>
-                <p> Rules </p>
+                <h1> Rules </h1>
                 {this.state.ruleList.map((rule, index) => {
                     return <Rule location="create" deleteClick={() => this.deleteRule(index)} rule={rule} />
                 })}

@@ -7,7 +7,7 @@ const GroupingSelector = (props) => {
     let history = useHistory();
 
     return <div>
-        <p>Group {props.groupId}</p>
+        <h1>Grouping {props.groupId}</h1>
 
         <Button variant="contained" color="primary" onClick={() => history.push({
             pathname: '/courseGrouping',

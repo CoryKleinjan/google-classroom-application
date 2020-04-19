@@ -21,8 +21,8 @@ class NavBar extends React.Component{
         return (
             <div className="NavBar">
                 <ul className="NavBar">
-                    <a className="NavItem" onClick={() => this.routeHome() }>Home</a>
-                    <a className="NavItem" onClick={() => this.routeClasses() }>Courses</a>
+                    <a className="NavItem" onClick={() => this.routeHome() }><b>HOME</b></a>
+                    <a className="NavItem" onClick={() => this.routeClasses() }><b>COURSES</b></a>
                 </ul>
             </div>
         );

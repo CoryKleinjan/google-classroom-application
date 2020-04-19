@@ -24,4 +24,6 @@ public class GroupingService {
     public void deleteById(Integer groupingId) { groupingRepository.deleteById(groupingId); }
 
     public List<Grouping> findByCourseId(Integer courseId) { return groupingRepository.findByCourseId(courseId); }
+
+    public Grouping findById(Integer groupingId) { return groupingRepository.getOne(groupingId); }
 }

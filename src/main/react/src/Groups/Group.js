@@ -8,7 +8,7 @@ const Group  = (props) => {
 
     return(
         <div>
-            <p>Group {props.index + 1}</p>
+            <h1>Group {props.index + 1}</h1>
             {props.group.map(student => {
                 return <p>{student.studentName}</p>
             })}
